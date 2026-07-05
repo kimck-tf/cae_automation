@@ -1,8 +1,8 @@
 # SDD — cae-copilot: 버추얼 성능개발(CAE) 통합 지능화·자동화 파일럿
 
-- **버전**: v1.3 (2026-07-05)
+- **버전**: v1.4 (2026-07-05)
 - **상태**: 설계 확정 — 구현 착수 전
-- **이력**: v1.1 (2026-07-05) — 스펙 리뷰 1차 반영: 전이 충족 의미론 신설(§3.6), 승인 채널 분리(§6.1), 마일스톤 반려 전이 정의, 지표 산출성 정정(§0.2·§12), 구현 페이즈 P-넘버링(§13), tool_class 전수 매핑(§7.1) / v1.2 (2026-07-05) — 스펙 리뷰 2차 반영: 전진 공식 예외 2건(셀프서비스 ③ 면제·override FAIL 무효화), §2.2 승인 흐름 정정, tool_class 참조 단일화(§5→§3.1), pilot 명령 표면 보완(intervene·milestone_requested 기록 주체), 승인 2차 잠금, 지표 단위·해석 주석 / v1.3 (2026-07-05) — 스펙 리뷰 3차 반영: 2차 잠금을 approve 한정으로 정정(훅·빌더의 gate-record 정상 경로 보존), P0 테스트 항목 보강. 최종 승인(4차) 후 advisory 2건 추가 반영: gate-record 호출자 마커 스탬프(감사 실효화)·`!` 마커 상속 실증의 §11.2 병기
+- **이력**: v1.1 (2026-07-05) — 스펙 리뷰 1차 반영: 전이 충족 의미론 신설(§3.6), 승인 채널 분리(§6.1), 마일스톤 반려 전이 정의, 지표 산출성 정정(§0.2·§12), 구현 페이즈 P-넘버링(§13), tool_class 전수 매핑(§7.1) / v1.2 (2026-07-05) — 스펙 리뷰 2차 반영: 전진 공식 예외 2건(셀프서비스 ③ 면제·override FAIL 무효화), §2.2 승인 흐름 정정, tool_class 참조 단일화(§5→§3.1), pilot 명령 표면 보완(intervene·milestone_requested 기록 주체), 승인 2차 잠금, 지표 단위·해석 주석 / v1.3 (2026-07-05) — 스펙 리뷰 3차 반영: 2차 잠금을 approve 한정으로 정정(훅·빌더의 gate-record 정상 경로 보존), P0 테스트 항목 보강. 최종 승인(4차) 후 advisory 2건 추가 반영: gate-record 호출자 마커 스탬프(감사 실효화)·`!` 마커 상속 실증의 §11.2 병기 / v1.4 (2026-07-05) — GUI 전략 반영(사용자 검토 결정): 프론트엔드 2-헤드 원칙(D7), 승인 채널 일반화(§6.1), 승인 카드 파일화, P-GUI 페이즈 신설(§13), SDK/CLI 하네스 동등성 스모크(§15); 확인 패스 advisory 5건 반영(D7 데이터소스에 GateResult·harness 문서 추가, verdict의 manifest 직접 렌더링, 카드 seq 버전링, 동등성 스모크에 승인 채널 행동 포함, 표기 정렬 2건)
 - **상위 문서(WHAT의 SSOT)**: `공모전_제안서_통합플랫폼_v6_260705(최종제출).md` — 본 SDD는 그 제안을 실제 구현하기 위한 HOW를 정의한다. 두 문서가 충돌하면 제안서의 "무엇·왜"가 우선하고, 본 SDD의 "어떻게"가 그것을 실현하는 수단이다.
 - **시스템 가칭**: `cae-copilot` (리포지토리명, 변경 가능)
 
@@ -53,7 +53,7 @@
 | 기술정본 재배치안 v8 | 이 폴더 `핵심구성요소_재배치안.md` | 4대 구성요소 구조·근거 설명(문구는 v6 우선) |
 | hm-assistant | `C:\_PYTHON\0_CK_Project\4. Hypermesh assistant` | HyperMesh bridge(TCP JSON-RPC :9876) vendor 원본, 도구 정의·mock 서버·criteria 패턴, HM 2026.1 API 검증분 |
 | agent_cae3 | `C:\_PYTHON\0_CK_Project\11. Agent_CAE_improve\agent_cae` | AbaqusWrapper·theory_validator·error_classifier·html_report 이식 원본 (610 테스트 자산) |
-| ClaudeApp | `C:\_PYTHON\0_CK_Project\17. ClaudeApp` | H-Chat 게이트웨이 경유 claude-agent-sdk 검증 경로, 운영 GUI 후보, default-DENY 보안 게이팅 참조 |
+| ClaudeApp | `C:\_PYTHON\0_CK_Project\17. ClaudeApp` | H-Chat 게이트웨이 경유 claude-agent-sdk 검증 경로, GUI 헤드(P-GUI)의 기반 자산(D7), default-DENY 보안 게이팅 참조 |
 | nCode 조사 | `_brain/knowledge/ncode-designlife-automation-mcp.md` | dtproc/.dcl·flowproc 배치 경로, FEABench 교훈 |
 
 ---
@@ -83,6 +83,8 @@
    │  자연어 지시 · Q&A · 마일스톤 승인 — 단일 채팅 창구
    ▼
 Claude Code 세션 ←─ 운영: H-Chat 게이트웨이(ClaudeApp 자산) / 개발: 외부 Claude
+   │   ※ 프론트엔드 2-헤드(D7): CLI(개발·파워유저) / GUI(엔지니어, P-GUI)
+   │      — 같은 세션 런타임·같은 하네스 위의 두 머리
    │
    ├─ 하네스 표면 (.claude/)
    │    CLAUDE.md(헌법·안전규칙) · Skills(트랙별 표준절차·판단절차)
@@ -131,6 +133,7 @@ Claude Code 세션 ←─ 운영: H-Chat 게이트웨이(ClaudeApp 자산) / 개
 - **D4. 하네스 검색 = 파일트리 + Grep 우선.** 임베딩 RAG는 검색 재현율 부족이 실측되면 추가(agent_cae3 RAG 자산 대기).
 - **D5. 게이트2 = 별도 서브에이전트.** 작성 컨텍스트와 분리하되, **같은 LLM이므로 "완전 독립"이 아니라 완화 장치**임을 명세·보고 문구 양쪽에 명기한다. 인식론적 독립은 G3의 물리·실적 검증이 담당한다.
 - **D6. fail-closed.** 검증기·훅 자체가 실패하면 게이트 대상 도구는 거부된다. 검증 불가 ≠ 통과.
+- **D7. 프론트엔드 2-헤드.** 하네스 리포(hooks·게이트·pilot·MCP·Skills)가 제품 본체이고, **CLI**(Claude Code — 개발·파워유저)와 **GUI**(claude-agent-sdk 기반, ClaudeApp 계열 — 엔지니어)는 같은 세션 런타임 위의 두 프론트엔드다. GUI는 `setting_sources=["project"]`로 동일 하네스를 로딩하며, 헤드가 하네스 의미론을 바꾸는 것을 금지한다. 상태 렌더링(진행 보드·승인 패널·게이트 뷰어)은 외부화된 산출물만 읽는다 — manifest·events·카드 + GateResult 파일·링크된 harness 문서(읽기 전용). 헤드 사적 상태 금지 — 훅 강제를 위해 외부화한 상태(SSOT)를 GUI 데이터소스로 재사용.
 
 ---
 
@@ -310,8 +313,8 @@ rules:
 
 ### 6.1 마일스톤 승인 모드 (기본)
 
-- M1/M2/M3 도달 시 에이전트가 **승인 요약 카드** 생성(Skill 정의 양식): 변경사항·게이트 결과·리스크·다음 단계 — 이때 `milestone_requested` 이벤트 기록(기록 주체 = `pilot advance`, §3.2 — 승인 대기시간 측정 기점).
-- **승인은 인간 전용 채널**: 엔지니어가 Claude Code 입력창에서 `!pilot approve M1 --reason "..."`(`!` = 사용자 직접 실행) 또는 별도 터미널로 직접 실행 → pilot CLI가 manifest·events 기록. **에이전트의 `pilot approve` 호출은 훅이 무조건 차단**(§5) — 훅 입장에서 "사람이 시킨 승인"과 "에이전트 자발 승인"을 구분할 수 없으므로 채널 자체를 분리한다. `/승인` command는 대리 실행이 아니라 승인 카드 재표시 + 실행할 명령 안내다.
+- M1/M2/M3 도달 시 에이전트가 **승인 요약 카드** 생성(Skill 정의 양식): 변경사항·게이트 결과·리스크·다음 단계. 카드는 **채팅 출력과 동시에 `jobs/<job_id>/cards/<Mx>_<seq>.md` 파일로도 저장**한다(반려→재요청 시 seq 증가, 덮어쓰기 금지 — 감사 추적 보존, GateResult JSON 파일화와 같은 원칙). 단 카드는 에이전트 작성 서술이므로 **승인 패널의 게이트 verdict·ADVISORY/NO_REFERENCE 플래그는 카드 텍스트가 아니라 manifest에서 직접 렌더링**한다(카드는 서술 보조 — 서술 왜곡 채널 차단). 이때 `milestone_requested` 이벤트 기록(기록 주체 = `pilot advance`, §3.2 — 승인 대기시간 측정 기점).
+- **승인은 인간 전용 채널**: 정의 = **에이전트 세션 밖 프로세스에서 실행되는 `pilot approve`만 유효** → pilot CLI가 manifest·events 기록. 헤드별 구현 — **CLI**: 엔지니어가 입력창에서 `!pilot approve M1 --reason "..."`(`!` = 사용자 직접 실행) 또는 별도 터미널 / **GUI(P-GUI)**: 승인 패널 버튼이 세션 밖 프로세스로 `pilot approve` 실행(세션 마커 상속 문제 원천 부재 — 아래 `!` 마커 실증 이슈는 CLI 헤드 한정). **에이전트의 `pilot approve` 호출은 훅이 무조건 차단**(§5) — 훅 입장에서 "사람이 시킨 승인"과 "에이전트 자발 승인"을 구분할 수 없으므로 채널 자체를 분리한다. `/승인` command는 대리 실행이 아니라 승인 카드 재표시 + 실행할 명령 안내다.
 - **Phase 1 신뢰 경계**: 승인의 진본성은 "같은 PC, 같은 사용자 계정"(단일 사용자 파일럿)에 의존한다. 다중 사용자 운영으로 확장 시 승인자 인증 채널이 필요하다(§15).
 - **2차 잠금(심층 방어) — approve 한정**: 훅의 명령 패턴 매칭에는 우회면(변형 표기·간접 호출)이 있으므로, pilot CLI 자체도 에이전트 세션 환경 마커를 감지하면 **approve를 거부**한다. **gate-record는 잠금 대상에서 제외** — 정당한 호출자(PostToolUse/SubagentStop 훅, pptx 빌더)가 모두 세션 프로세스 트리 안에서 실행되어 마커를 상속하므로, 마커 잠금을 걸면 정상 경로가 fail-closed로 정지한다. gate-record 보호는 1차 PreToolUse deny(§5) + manifest–events 대조 감사(§3.5)로 유지한다. 감사 실효화: pilot gate-record는 세션 마커를 감지해도 거부하지 않되 **이벤트 payload에 호출자 마커를 스탬프**한다 — 정상 경로 무영향, 난독화 우회 호출의 사후 감사 신호 확보. `!` 직접 실행이 세션 환경 마커를 상속하지 않는지 **P0 우회 테스트로 실증**하고, 상속한다면(사람 채널까지 오차단) 별도 터미널을 기본 승인 채널로 확정한다.
 - **반려 사유는 `harness/wiki/inbox/`로 자동 적재** — 환류 루프의 1차 입력원.
@@ -444,7 +447,7 @@ cae-copilot/
 │  ├─ cases/                  # 사례 카드 = 실적 범위 DB
 │  ├─ templates/              # 덱 템플릿 · nCode flow 템플릿 · pptx 양식
 │  └─ wiki/                   # inbox/ (환류 수집) → 정리된 카드
-├─ jobs/                      # ACTIVE 포인터 + <job_id>/ (manifest·events·decks·results·reports)
+├─ jobs/                      # ACTIVE 포인터 + <job_id>/ (manifest·events·cards·decks·results·reports)
 └─ tests/                     # 게이트 FAIL 검출 · 훅 우회 시도 · Mock E2E
 ```
 
@@ -472,7 +475,7 @@ cae-copilot/
 - `settings.json` allowlist: hm_mcp 도구 / `python -m cae_tools.*`·`python -m gates.*`·`python -m pilot` Bash prefix / Read·Edit는 리포+jobs 범위. 운영 프로파일에서 웹 접근 deny. **deny가 allow에 우선**: `pilot approve`·`pilot gate-record`의 에이전트 호출 차단(§5)은 allowlist 안에서도 유효하다.
 - manifest 무결성(§3.5): 장부 조작에 의한 게이트 우회 경로 봉쇄.
 - 에이전트는 사용자 계정 권한·라이선스 범위 내 실행. 공식 판정 권한은 엔지니어 유지(M3 + `--official` 훅).
-- 운영 GUI로 ClaudeApp 채택 시 default-DENY 정책과 본 리포 allowlist의 정합 확인(P3 체크 항목).
+- GUI 헤드(ClaudeApp 계열) 채택 시 default-DENY 정책과 본 리포 allowlist의 정합 확인(P-GUI 착수 체크 항목).
 
 ---
 
@@ -504,7 +507,7 @@ cae-copilot/
 
 ---
 
-## 13. 구현 순서 (구현 페이즈 P0~P5)
+## 13. 구현 순서 (구현 페이즈 P0~P5 + P-GUI)
 
 승인 마일스톤 M1~M3(§0.4)과 **구분되는 별도 이름공간**으로 P-넘버링을 쓴다. 상세 계획은 별도 문서로, **P 단위로 분할 작성**한다(단일 plan으로 다루지 않는다).
 
@@ -516,7 +519,11 @@ P2 트랙① 완주 Abaqus·Nastran 러너 + G2 서브에이전트 + G3(구조) 
               → Mock E2E 통과 = dev 프로파일 완성
 P3 운영 이관  사내 설치 + 실 하네스 문서 + 파일럿 실측 개시          (P2 후)
 P4 트랙②     load_history(.req/.rsp) + nCode 러너 + G3-피로          (P2 후, P3와 병행 가능)
-P5 성숙       환류 자동화 + 지표 집계 + 셀프서비스 모드 개방(§6.2 제한 범위)
+P-GUI 헤드    claude-agent-sdk GUI(ClaudeApp 계열): 하네스 project 로딩(D7) +
+              승인 패널·진행 보드·게이트 결과 뷰어(표준 문서 링크)·양식형
+              진입점·마일스톤 알림                                    (P2 후 병행, P5의 전제조건)
+P5 성숙       환류 자동화 + 지표 집계 + 셀프서비스 모드 개방(§6.2 제한 범위,
+              비전문가 대상 개방은 P-GUI 완료 전제)
 ```
 
 ---
@@ -541,6 +548,7 @@ P5 성숙       환류 자동화 + 지표 집계 + 셀프서비스 모드 개방
 | HM 2026.1 hwx API 변동 | hm_mcp | hm-assistant Phase 2 API matrix·검증분 활용 |
 | 사내 반입·설치 제약 | P3 | 반입 절차 사전 확인. bridge는 표준 라이브러리+hwx만(기존 규칙), 나머지는 통상 pip |
 | 다중 사용자 승인 진본성 | 확산(Phase 2+) | Phase 1 신뢰 경계 = 단일 사용자 계정(§6.1). 확산 시 승인자 인증 채널 설계 |
+| SDK/CLI 하네스 동등성 (GUI 헤드) | P-GUI | ClaudeApp은 격리 목적으로 `setting_sources=[]`로 하네스 로딩을 껐음 — GUI 헤드는 project 로딩을 켜야 하며, hooks 발화·Skills 로딩·승인 채널 행동(패널 approve 통과 + 세션 내 에이전트 approve 차단)의 SDK/CLI 동등성을 P-GUI 착수 스모크(§11.2 우회 스위트 재실행 포함)로 실증 |
 
 ---
 
