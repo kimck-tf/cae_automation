@@ -1,8 +1,8 @@
 # SDD — cae-copilot: 버추얼 성능개발(CAE) 통합 지능화·자동화 파일럿
 
-- **버전**: v1.4 (2026-07-05)
+- **버전**: v1.5 (2026-07-05)
 - **상태**: 설계 확정 — 구현 착수 전
-- **이력**: v1.1 (2026-07-05) — 스펙 리뷰 1차 반영: 전이 충족 의미론 신설(§3.6), 승인 채널 분리(§6.1), 마일스톤 반려 전이 정의, 지표 산출성 정정(§0.2·§12), 구현 페이즈 P-넘버링(§13), tool_class 전수 매핑(§7.1) / v1.2 (2026-07-05) — 스펙 리뷰 2차 반영: 전진 공식 예외 2건(셀프서비스 ③ 면제·override FAIL 무효화), §2.2 승인 흐름 정정, tool_class 참조 단일화(§5→§3.1), pilot 명령 표면 보완(intervene·milestone_requested 기록 주체), 승인 2차 잠금, 지표 단위·해석 주석 / v1.3 (2026-07-05) — 스펙 리뷰 3차 반영: 2차 잠금을 approve 한정으로 정정(훅·빌더의 gate-record 정상 경로 보존), P0 테스트 항목 보강. 최종 승인(4차) 후 advisory 2건 추가 반영: gate-record 호출자 마커 스탬프(감사 실효화)·`!` 마커 상속 실증의 §11.2 병기 / v1.4 (2026-07-05) — GUI 전략 반영(사용자 검토 결정): 프론트엔드 2-헤드 원칙(D7), 승인 채널 일반화(§6.1), 승인 카드 파일화, P-GUI 페이즈 신설(§13), SDK/CLI 하네스 동등성 스모크(§15); 확인 패스 advisory 5건 반영(D7 데이터소스에 GateResult·harness 문서 추가, verdict의 manifest 직접 렌더링, 카드 seq 버전링, 동등성 스모크에 승인 채널 행동 포함, 표기 정렬 2건)
+- **이력**: v1.1 (2026-07-05) — 스펙 리뷰 1차 반영: 전이 충족 의미론 신설(§3.6), 승인 채널 분리(§6.1), 마일스톤 반려 전이 정의, 지표 산출성 정정(§0.2·§12), 구현 페이즈 P-넘버링(§13), tool_class 전수 매핑(§7.1) / v1.2 (2026-07-05) — 스펙 리뷰 2차 반영: 전진 공식 예외 2건(셀프서비스 ③ 면제·override FAIL 무효화), §2.2 승인 흐름 정정, tool_class 참조 단일화(§5→§3.1), pilot 명령 표면 보완(intervene·milestone_requested 기록 주체), 승인 2차 잠금, 지표 단위·해석 주석 / v1.3 (2026-07-05) — 스펙 리뷰 3차 반영: 2차 잠금을 approve 한정으로 정정(훅·빌더의 gate-record 정상 경로 보존), P0 테스트 항목 보강. 최종 승인(4차) 후 advisory 2건 추가 반영: gate-record 호출자 마커 스탬프(감사 실효화)·`!` 마커 상속 실증의 §11.2 병기 / v1.4 (2026-07-05) — GUI 전략 반영(사용자 검토 결정): 프론트엔드 2-헤드 원칙(D7), 승인 채널 일반화(§6.1), 승인 카드 파일화, P-GUI 페이즈 신설(§13), SDK/CLI 하네스 동등성 스모크(§15); 확인 패스 advisory 5건 반영(D7 데이터소스에 GateResult·harness 문서 추가, verdict의 manifest 직접 렌더링, 카드 seq 버전링, 동등성 스모크에 승인 채널 행동 포함, 표기 정렬 2건) / v1.5 (2026-07-05) — Codex 적대적 리뷰 재검토 반영: 게이트 기록 계산형 전환(gate-record 폐지 → gate-run, target_sha TOCTOU 대조), 집행 기계류 에이전트 쓰기 차단 신설(D8), jobs/ACTIVE 폐지·CAE_JOB_ID 단일화·쓰기 명령 --job 필수, events 선기록·원자적 manifest·pilot rebuild(§3.5), 셀프서비스 보강 2건(워터마크 판정 등급·P5 조건부 개방); 확인 패스 4건 반영(게이트 인스턴스 귀속 규칙·G2 보호 경로 입력 검증·증거 파일 쓰기 차단·SSOT 용어 정리) + advisory 4건(환류 반영 주체 인간 명시·CAE_JOB_ID 설정 주체·D8 적용 경계·SessionStart 표기); 최종 확인 1건 반영(§10.2 allowlist 네거티브형 전환 — S0 plan.md 교착 해소, 차단 SSOT를 §5로 단일화) + 표기 정렬 3건(§12 인스턴스 언어·§3.4 requires 병기·§9 runtime/ 트리 반영)
 - **상위 문서(WHAT의 SSOT)**: `공모전_제안서_통합플랫폼_v6_260705(최종제출).md` — 본 SDD는 그 제안을 실제 구현하기 위한 HOW를 정의한다. 두 문서가 충돌하면 제안서의 "무엇·왜"가 우선하고, 본 SDD의 "어떻게"가 그것을 실현하는 수단이다.
 - **시스템 가칭**: `cae-copilot` (리포지토리명, 변경 가능)
 
@@ -40,7 +40,7 @@
 |---|---|
 | 하네스(Harness) | AI가 따라야 할 업무표준·절차·판단 기준·검증 장치의 총체. 본 설계에서 실체는 `CLAUDE.md` + `.claude/skills/` + `harness/` 디렉터리 |
 | 게이트(Gate) | 산출물이 하네스를 지켰는지 확인하는 검증 단계. G1(표준 준수)·G2(추론 검증)·G3(물리·실적) 3층 |
-| 매니페스트(manifest) | 작업 1건의 상태 SSOT — `jobs/<job_id>/manifest.json` |
+| 매니페스트(manifest) | 작업 1건의 상태 조회 뷰(훅·전이 판정용) — `jobs/<job_id>/manifest.json`. truth의 원천은 events 원장이고 manifest는 재생성 캐시(§3.5) |
 | 마일스톤(M1/M2/M3) | 엔지니어 승인 지점: M1 모델 확정 · M2 해석조건 확정 · M3 결과 판정 |
 | 무개입 완주율 | 반복 실행 단계에서 **승인 외 수동 개입** 없이 표준 절차를 완료한 작업 비율. 마일스톤 승인은 설계된 절차이므로 "개입"에 포함하지 않는다(§12) |
 | problem_class | 문제 유형 분류: `closed_form` / `linear_static_complex` / `fatigue_load_history` / `nonlinear_advanced` — G3 판정 모드를 결정(§4.3) |
@@ -90,7 +90,7 @@ Claude Code 세션 ←─ 운영: H-Chat 게이트웨이(ClaudeApp 자산) / 개
    │    CLAUDE.md(헌법·안전규칙) · Skills(트랙별 표준절차·판단절차)
    │    Commands(/해석시작 /하중분석 /승인 /상태 /환류) · 서브에이전트(gate2-reviewer)
    │
-   ├─ Hooks (게이트 강제 계층)          ◄── 판정 근거 = jobs/<id>/manifest.json (SSOT)
+   ├─ Hooks (게이트 강제 계층)          ◄── 판정 근거 = manifest (조회 뷰 — truth 원천은 events, §3.5)
    │    PreToolUse: 게이트 PASS·승인 없이 다음 단계 도구 호출 차단
    │    PostToolUse: 산출물 생성 시 G1 자동 실행·기록
    │    Stop: 미결 게이트·미승인 마일스톤 경고 / SessionStart: 활성 job 요약 주입
@@ -134,6 +134,7 @@ Claude Code 세션 ←─ 운영: H-Chat 게이트웨이(ClaudeApp 자산) / 개
 - **D5. 게이트2 = 별도 서브에이전트.** 작성 컨텍스트와 분리하되, **같은 LLM이므로 "완전 독립"이 아니라 완화 장치**임을 명세·보고 문구 양쪽에 명기한다. 인식론적 독립은 G3의 물리·실적 검증이 담당한다.
 - **D6. fail-closed.** 검증기·훅 자체가 실패하면 게이트 대상 도구는 거부된다. 검증 불가 ≠ 통과.
 - **D7. 프론트엔드 2-헤드.** 하네스 리포(hooks·게이트·pilot·MCP·Skills)가 제품 본체이고, **CLI**(Claude Code — 개발·파워유저)와 **GUI**(claude-agent-sdk 기반, ClaudeApp 계열 — 엔지니어)는 같은 세션 런타임 위의 두 프론트엔드다. GUI는 `setting_sources=["project"]`로 동일 하네스를 로딩하며, 헤드가 하네스 의미론을 바꾸는 것을 금지한다. 상태 렌더링(진행 보드·승인 패널·게이트 뷰어)은 외부화된 산출물만 읽는다 — manifest·events·카드 + GateResult 파일·링크된 harness 문서(읽기 전용). 헤드 사적 상태 금지 — 훅 강제를 위해 외부화한 상태(SSOT)를 GUI 데이터소스로 재사용.
+- **D8. 집행 기계류는 에이전트에게 읽기 전용.** 검증기(`gates/`)·기준·표준·사례(`harness/` — `wiki/inbox` 제외)·전이 규칙(`pilot/`)·훅·설정(`.claude/`·`CLAUDE.md`)은 에이전트가 수정할 수 없다(§5·§10.2). 게이트를 통과하는 유일한 방법은 산출물을 고치는 것이고, 기준·검증기의 개정은 환류 제안(§6.3) → 인간 승인 경로만 존재한다 — "실패하는 테스트 대신 테스트를 고친다"는 드리프트 경로의 구조적 봉쇄.
 
 ---
 
@@ -204,18 +205,18 @@ rules:
 }
 ```
 
-- **쓰기는 `pilot` CLI 한 곳으로 집중**: `pilot new` / `pilot advance` / `pilot gate-record` / `pilot approve` / `pilot intervene`. CLI가 전이 조건(tracks yaml)을 검사·거부하는 1차 방어선. hooks는 2차 방어망(심층 방어). `milestone_requested` 이벤트는 `pilot advance`가 마일스톤 대기 상태로 진입하는 시점에 자동 기록한다(별도 명령 없음).
-- 활성 job 포인터: `jobs/ACTIVE` (job_id 1줄) — hooks가 참조. **Phase 1 제약: 리포당 동시 활성 job 1건.** 병행이 필요해지면 세션별 `CAE_JOB_ID` 환경변수가 ACTIVE보다 우선한다.
+- **쓰기는 `pilot` CLI 한 곳으로 집중**: `pilot new` / `pilot advance` / `pilot gate-run` / `pilot approve` / `pilot intervene` / `pilot rebuild`. CLI가 전이 조건(tracks yaml)을 검사·거부하는 1차 방어선. hooks는 2차 방어망(심층 방어). `milestone_requested` 이벤트는 `pilot advance`가 마일스톤 대기 상태로 진입하는 시점에 자동 기록한다(별도 명령 없음).
+- **쓰기 명령은 `--job <job_id>` 필수** — 대상 job을 항상 명시하고 pilot이 manifest의 job_id와 대조한다. 활성 포인터 파일(`jobs/ACTIVE`)은 **두지 않는다** — 포인터 전환에 의한 오귀속 시나리오를 원천 제거. 세션 컨텍스트(훅의 규칙 평가 대상 job)는 `CAE_JOB_ID` 환경변수로 단일화. **설정 주체는 세션 기동자**(사용자 셸·GUI 런처) — 훅은 자식 프로세스라 부모 세션의 환경변수를 설정할 수 없다. SessionStart 훅은 검증·안내만 담당: 미설정이면 미완료 job 목록을 안내하고, 게이트 대상 도구는 fail-closed로 차단된다. **Phase 1 제약: 세션당 활성 job 1건.**
 
 ### 3.3 events.jsonl — 이벤트 원장 (append-only)
 
-`{ts, type, payload}` 라인 단위. type: `stage_start | stage_complete | gate_run | gate_pass | gate_fail | self_correction | milestone_requested | approval | rejection | override | human_intervention | tool_error | session_summary`. 재작업으로 재발화되는 `stage_complete`는 `rework: true` 플래그를 갖는다(지표 이중 계수 방지). **지표 5종의 1차 산출 원천**(지표별 산출성 구분은 §12). manifest의 수치는 이 원장의 집계 캐시다.
+`{seq, ts, type, payload}` 라인 단위(seq = 단조 증가 일련번호 — 재생성 결정성 확보). type: `stage_start | stage_complete | gate_run | gate_pass | gate_fail | self_correction | milestone_requested | approval | rejection | override | human_intervention | tool_error | session_summary`. 재작업으로 재발화되는 `stage_complete`는 `rework: true` 플래그를 갖는다(지표 이중 계수 방지). **지표 5종의 1차 산출 원천**(지표별 산출성 구분은 §12). manifest의 수치는 이 원장의 집계 캐시다.
 
 ### 3.4 GateResult 스키마
 
 ```jsonc
 {
-  "gate": "G1", "target": "decks/bracket_v2.inp",
+  "gate": "G1", "target": "decks/bracket_v2.inp", "target_sha": "sha256:…",  // 검증 시점의 대상 파일 해시
   "verdict": "PASS | FAIL | ADVISORY | ERROR | NO_REFERENCE",
   "checks": [
     {"id": "unit-mm-t-s", "result": "pass",
@@ -228,11 +229,13 @@ rules:
 ```
 
 - `ERROR` = 검증기 자체 실패 → fail-closed(D6). `NO_REFERENCE` = 대조할 실적 데이터 부재 → PASS 아님, 엔지니어 판단 필요 표시.
+- **TOCTOU 방지**: `pilot advance`는 전이 판정 시 GateResult의 `target_sha`를 대상 파일의 현재 해시와 대조한다(훅의 requires 검사도 동일 기준 — §3.6) — 게이트 기록 후 산출물이 재수정됐으면 해당 게이트는 미충족(재실행 필요)으로 간주한다.
 
-### 3.5 manifest 무결성
+### 3.5 상태 무결성·원자성
 
 - `jobs/**/manifest.json`·`events.jsonl`의 직접 Edit/Write는 **훅이 차단**(pilot CLI 경유만 허용).
-- pilot CLI는 모든 변경을 events에 동시 기록 — manifest와 events의 불일치는 감사 신호.
+- **쓰기 순서 고정**: pilot의 모든 상태 변경은 ① events 선기록(append) → ② manifest 갱신(temp 파일 작성 후 atomic rename) 순서를 따른다. **events가 유일한 truth, manifest는 재생성 캐시** — 불일치 시 `pilot rebuild`가 events에서 manifest를 재생성한다.
+- **복구·멱등 규칙**: rebuild는 찢긴 꼬리 라인(torn tail)을 관용(무시)하고, 상태 전이는 멱등 적용한다(예: 이미 approved인 마일스톤에 대한 중복 approval 이벤트는 상태 무변경). 크래시 복구 시나리오는 P0 테스트 대상(§11).
 
 ### 3.6 전이 충족 의미론 (pilot advance·훅의 판정 규칙)
 
@@ -240,9 +243,10 @@ rules:
 
 > **전진 가능 = ① 해당 단계의 모든 exit_gates 실행 완료 ∧ ② 각 verdict ∉ {FAIL, ERROR} (엔지니어 override로 무효화된 FAIL 제외 — §4.4) ∧ ③ 단계에 마일스톤이 지정돼 있으면 status=approved (milestone 모드에 한함 — self_service job은 ③ 면제, §6.2)**
 
-- **PASS**: 충족.
+- **PASS**: 충족 — 단 GateResult의 `target_sha`가 대상 파일의 현재 해시와 일치할 때만 유효(§3.4 TOCTOU 방지), 불일치 시 재실행 필요.
 - **ADVISORY / NO_REFERENCE**: 전이를 막지 않는다 — 단, 승인 요약 카드에 필수 표기되어 마일스톤 승인의 판단 대상이 된다. 마일스톤 대기가 생략되는 셀프서비스 job에서는 산출물 상태로 기록되고 '사전검토용' 워터마크가 그 역할을 대신한다(§6.2).
 - **FAIL**: 수정 후 재실행(attempts 증가). **ERROR**: fail-closed — 전진 불가, 사람 호출.
+- **기록의 인스턴스 귀속**: gate-run 기록은 단계가 아니라 **게이트×대상(target) 인스턴스** 기준으로 귀속·갱신된다 — 어느 단계에서 재실행되든 같은 대상에 대한 재실행은 해당 게이트의 기존 인스턴스(예: S2.G1)를 최신 GateResult로 갱신한다(attempts 누적). requires·advance 판정은 항상 **해당 게이트의 최신 GateResult(현행 target_sha 일치)** 기준. 이 규칙이 없으면 S3 자가복구(덱 재편집)가 S2.G1을 영구 미충족으로 만드는 교착이 생긴다. §12의 최초 실행/재실행 구분은 이벤트 순서(seq)로 산출한다.
 - **마일스톤 반려 전이**: `rejected` 기록 시 해당 마일스톤의 소속 단계는 `in_progress`로 복귀(재작업). 재작업 후 게이트는 재실행되며 attempts는 누적된다. 마일스톤은 재요청(`milestone_requested`) 시 `pending`으로 복귀 → 재승인. 반려 사유는 §6.1 환류 경로를 따른다.
 
 ---
@@ -255,7 +259,7 @@ rules:
 - **검사 대상별 체크**:
   - 덱 린트: 단위계(mm-t-s: E=210000 MPa, ρ=7.85e-9 t/mm³), 필수 카드/키워드, **Nastran 고정폭 필드 정렬**, 재질–프로퍼티–섹션 연결 무결성, 사내 표준(명명 규칙·출력 요청 세트)
   - 메시 품질: S1 출구에서 hm_mcp 품질 리포트를 `harness/criteria/mesh_quality.yaml` 기준과 대조
-  - 보고서 린트: 필수 섹션 존재, **출처 인용 존재(무출처 차단)**, 수치–단위 표기. 트리거 2경로 — 원고(md, LLM 작성 섹션)는 PostToolUse 자동, 최종 pptx는 빌더가 내장 린트 후 gate-record(§7.5)
+  - 보고서 린트: 필수 섹션 존재, **출처 인용 존재(무출처 차단)**, 수치–단위 표기. 트리거 2경로 — 원고(md, LLM 작성 섹션)는 PostToolUse 자동, 최종 pptx는 빌더가 `pilot gate-run` 호출(§7.5)
 - **기준의 이중 표현**: 사람용 `harness/standards/*.md` ↔ 기계용 `harness/criteria/*.yaml` 쌍. 모든 체크의 `source` 필드가 문서 절을 인용해 동기화를 강제.
 
 ### 4.2 G2 — 추론 검증 (LLM 서브에이전트, 중간 비용)
@@ -263,7 +267,7 @@ rules:
 - **트리거**: 추론 산출물의 단계 출구 — S0 계획, S2 조건 정의, S4 판정 서술.
 - **메커니즘**: `gate2-reviewer` 서브에이전트가 **작성 과정의 컨텍스트 없이** 산출물 + 관련 하네스 발췌 + 단계별 체크리스트만 받아 검토. 반환: `{concerns[], verdict}`.
 - **검사 범위**: 가정 타당성, 요청–조건 정합(하중 방향·크기·구속이 요청과 맞는가), 논리 비약, 표준 해석절차와의 정합.
-- **기록 진본성**: G2 verdict는 메인 에이전트 손을 거치지 않는다 — SubagentStop 훅이 gate2-reviewer 완료 시점에 결과를 파싱해 직접 `pilot gate-record`를 호출한다. 에이전트의 `gate-record` 직접 호출은 차단(§5).
+- **기록 진본성**: G2 verdict는 메인 에이전트 손을 거치지 않는다 — SubagentStop 훅이 gate2-reviewer 완료 시점에 결과를 파싱해 **D8 보호 경로 `pilot/runtime/g2/`**(훅 프로세스만 기록 가능 — 에이전트 도구 쓰기 차단 경로)에 저장하고 `pilot gate-run G2 --from-subagent <그 파일> --job <id>`를 호출한다. **pilot은 `--from-subagent` 입력이 이 보호 경로 안에 있을 때만 수용**한다(에이전트가 위조 결과 파일을 주입하는 벡터 차단). G2는 계산 불가능한 주장형 게이트라 이 경로만 유효(§4.4) — 에이전트의 G2 기록 직접 호출은 차단(§5).
 - FAIL → 수정 전 전진 불가. **한계 명기(D5)**: 같은 LLM 기반이므로 완화 장치이며, 독립 검증은 G3가 담당.
 
 ### 4.3 G3 — 물리·실적 (결정론+데이터, 최종 관문)
@@ -282,6 +286,7 @@ rules:
 ### 4.4 공통 규칙
 
 - fail-closed(D6): verdict `ERROR`는 통과가 아니다.
+- **기록은 계산이지 주장이 아니다**: G1·G3의 GateResult는 `pilot gate-run <게이트> <대상> --job <id>`가 검증기를 pilot 프로세스 안에서 직접 실행해 산출한다 — verdict를 인자로 받는 기록 명령이 존재하지 않으므로 위조 대상 자체가 없다. 누가 호출하든(훅·빌더·에이전트) 결과가 동일하므로 gate-run은 호출 차단이 필요 없다. G2만 예외(LLM 판정 = 본질적 주장) — SubagentStop 훅 전용 기록 경로(§4.2), 에이전트 직접 기록은 차단(§5).
 - **override 절차**: 게이트 FAIL을 엔지니어가 검토 후 무효화할 수 있다 — 반드시 `pilot approve --override <gate> --reason`(인간 전용 채널, §6.1)으로 기록되고, `override` 이벤트는 **"개입"으로 계수**된다(지표 왜곡 방지, §12). 게이트 과잉 차단(false positive)의 안전밸브.
 - 게이트 서술 규칙: 대외 문구는 "차단을 보증한다"가 아니라 **"리스크를 겹겹이 거르고, 자동판정 밖은 엔지니어 승인이 최종 방어선"** — 제안서 정직성 규약 상속.
 
@@ -295,13 +300,15 @@ rules:
 | PreToolUse | nCode 러너 호출 | S3 완료 + 하중이력 분석 산출물 존재 |
 | PreToolUse | `hm_mutate` 클래스 (패턴 목록은 §3.1 tool_classes가 SSOT) | 활성 job + stage ∈ {S1, S2}. **조회(`hm_query`)는 상시 허용**(Q&A·세션 브리지) |
 | PreToolUse | `jobs/**/manifest.json`·`events.jsonl` 직접 Edit/Write | 차단 (pilot CLI 경유만) |
-| PreToolUse | 에이전트의 `pilot approve`(승인·반려·override)·`pilot gate-record` 호출 | **무조건 차단** — 승인은 인간 전용 채널(§6.1), 게이트 기록은 훅·검증기 전용 경로 |
+| PreToolUse | 집행 기계류 Edit/Write — `gates/**`·`harness/**`(`wiki/inbox` 제외)·`pilot/**`·`.claude/**`·`CLAUDE.md` | **차단(D8)** — "기준·검증기를 고쳐 게이트를 통과"하는 드리프트 경로 봉쇄. 개정은 `wiki/inbox/` 제안 → 인간 승인(§6.3) |
+| PreToolUse | 증거·계기판 Edit/Write — `jobs/**/results/**`(result.json·extracted·`load_analysis.json`)·`jobs/**/gates/**`(GateResult 파일) | **차단** — G3가 읽는 입력·게이트 증빙은 러너·분석기·pilot(서브프로세스 파일 IO)만 기록. "결과를 고쳐 G3를 통과"하는 오염 벡터 봉쇄 — 동어반복 검증 함정의 파일시스템 재진입 차단(D5의 인식론적 독립 보전) |
+| PreToolUse | 에이전트의 `pilot approve`(승인·반려·override)·G2 기록 호출 | **무조건 차단** — 승인은 인간 전용 채널(§6.1), G2 기록은 SubagentStop 훅 전용(§4.2). ※ gate-run(G1·G3)은 계산형이라 차단 불요(§4.4) |
 | PreToolUse | 보고서 빌더 `--official` | M3 승인 필수. 미승인·셀프서비스 → '사전검토용' 워터마크 강제 |
-| PostToolUse | `decks/**`·`reports/**` Edit/Write, HM export | **G1 자동 실행** → manifest 기록, FAIL 시 체크리스트 반환(수정 유도) |
+| PostToolUse | `decks/**`·`reports/**` Edit/Write, HM export | **`pilot gate-run G1` 자동 호출**(계산형 §4.4) → 기록, FAIL 시 체크리스트 반환(수정 유도) |
 | PostToolUse | 러너 종료 | result.json 파싱·기록, 에러 시 error_classifier 시그니처 로깅 |
-| SubagentStop | gate2-reviewer 완료 | 결과 파싱 → `pilot gate-record`(G2) 직접 기록 — 메인 에이전트 미경유(§4.2) |
+| SubagentStop | gate2-reviewer 완료 | 결과 파싱 → G2 기록(`gate-run G2 --from-subagent <결과파일>`) — 메인 에이전트 미경유(§4.2) |
 | Stop | 세션 종료 | 미결 게이트·미승인 마일스톤 요약 **경고(차단 아님)** + `session_summary` 이벤트 기록 |
-| SessionStart | 세션 시작 | 활성 job의 현재 단계·미결 항목을 컨텍스트에 주입(중단 후 재개 인체공학) |
+| SessionStart | 세션 시작 | `CAE_JOB_ID` 검증(미설정 시 미완료 job 안내 — §3.2) + 해당 job의 현재 단계·미결 항목을 컨텍스트에 주입(중단 후 재개 인체공학) |
 
 - **도구→단계 매핑은 도구 클래스 단위**(3.1 tool_classes)로 거칠게 유지 — 견고성 우선. 세밀한 절차 준수는 Skill(레일)이, 관문은 hooks(강제)가 맡는 역할 분리.
 - **fail-closed 래퍼**: 훅 스크립트 예외 시 게이트 대상 도구 클래스는 거부 + 오류 보고.
@@ -316,20 +323,20 @@ rules:
 - M1/M2/M3 도달 시 에이전트가 **승인 요약 카드** 생성(Skill 정의 양식): 변경사항·게이트 결과·리스크·다음 단계. 카드는 **채팅 출력과 동시에 `jobs/<job_id>/cards/<Mx>_<seq>.md` 파일로도 저장**한다(반려→재요청 시 seq 증가, 덮어쓰기 금지 — 감사 추적 보존, GateResult JSON 파일화와 같은 원칙). 단 카드는 에이전트 작성 서술이므로 **승인 패널의 게이트 verdict·ADVISORY/NO_REFERENCE 플래그는 카드 텍스트가 아니라 manifest에서 직접 렌더링**한다(카드는 서술 보조 — 서술 왜곡 채널 차단). 이때 `milestone_requested` 이벤트 기록(기록 주체 = `pilot advance`, §3.2 — 승인 대기시간 측정 기점).
 - **승인은 인간 전용 채널**: 정의 = **에이전트 세션 밖 프로세스에서 실행되는 `pilot approve`만 유효** → pilot CLI가 manifest·events 기록. 헤드별 구현 — **CLI**: 엔지니어가 입력창에서 `!pilot approve M1 --reason "..."`(`!` = 사용자 직접 실행) 또는 별도 터미널 / **GUI(P-GUI)**: 승인 패널 버튼이 세션 밖 프로세스로 `pilot approve` 실행(세션 마커 상속 문제 원천 부재 — 아래 `!` 마커 실증 이슈는 CLI 헤드 한정). **에이전트의 `pilot approve` 호출은 훅이 무조건 차단**(§5) — 훅 입장에서 "사람이 시킨 승인"과 "에이전트 자발 승인"을 구분할 수 없으므로 채널 자체를 분리한다. `/승인` command는 대리 실행이 아니라 승인 카드 재표시 + 실행할 명령 안내다.
 - **Phase 1 신뢰 경계**: 승인의 진본성은 "같은 PC, 같은 사용자 계정"(단일 사용자 파일럿)에 의존한다. 다중 사용자 운영으로 확장 시 승인자 인증 채널이 필요하다(§15).
-- **2차 잠금(심층 방어) — approve 한정**: 훅의 명령 패턴 매칭에는 우회면(변형 표기·간접 호출)이 있으므로, pilot CLI 자체도 에이전트 세션 환경 마커를 감지하면 **approve를 거부**한다. **gate-record는 잠금 대상에서 제외** — 정당한 호출자(PostToolUse/SubagentStop 훅, pptx 빌더)가 모두 세션 프로세스 트리 안에서 실행되어 마커를 상속하므로, 마커 잠금을 걸면 정상 경로가 fail-closed로 정지한다. gate-record 보호는 1차 PreToolUse deny(§5) + manifest–events 대조 감사(§3.5)로 유지한다. 감사 실효화: pilot gate-record는 세션 마커를 감지해도 거부하지 않되 **이벤트 payload에 호출자 마커를 스탬프**한다 — 정상 경로 무영향, 난독화 우회 호출의 사후 감사 신호 확보. `!` 직접 실행이 세션 환경 마커를 상속하지 않는지 **P0 우회 테스트로 실증**하고, 상속한다면(사람 채널까지 오차단) 별도 터미널을 기본 승인 채널로 확정한다.
+- **2차 잠금(심층 방어)**: 훅의 명령 패턴 매칭에는 우회면(변형 표기·간접 호출)이 있으므로, pilot CLI 자체도 에이전트 세션 환경 마커를 감지하면 **approve를 거부**한다. ※ **G1·G3에 한해** 계산형 전환(§4.4)으로 잠금·호출자 스탬프가 불필요하다 — 누가 호출해도 결과가 같다. G2(주장형)는 보호 경로 입력 검증으로 방어한다(§4.2). `!` 직접 실행이 세션 환경 마커를 상속하지 않는지 **P0 우회 테스트로 실증**하고, 상속한다면(사람 채널까지 오차단) 별도 터미널을 기본 승인 채널로 확정한다.
 - **반려 사유는 `harness/wiki/inbox/`로 자동 적재** — 환류 루프의 1차 입력원.
 
 ### 6.2 자동 진행 모드 (셀프서비스)
 
 - job 생성 시 `mode=self_service` 고정(중도 전환 금지 — 전환하려면 새 job).
 - 마일스톤 **대기만 생략**, 게이트(G1·G2·G3)는 전부 상시 작동. G3의 "M3 승인 필수"(§4.3)는 셀프서비스에서 '사전검토용' 워터마크 + 공식 판정 차단으로 **대체**된다 — 승인이 사라지는 게 아니라 공식화 시점(엔지니어 검토)으로 이연되는 것.
-- 산출물 전체 '사전검토용' 워터마크, 공식 판정·`--official` 보고서 차단.
-- **Phase 1 개방 범위 제한**: 트랙①의 `closed_form`·`linear_static_complex`만. 피로·비선형은 마일스톤 모드 강제. 게이트 강건성이 실측으로 확인된 범위만 개방한다는 제안서 원칙의 실행형.
+- 산출물 전체 '사전검토용' 워터마크 — **게이트 판정 등급(ADVISORY/NO_REFERENCE 포함)을 워터마크에 병기**해 판정 상태가 산출물 표면에 드러나게 한다. 공식 판정·`--official` 보고서 차단.
+- **Phase 1 개방 범위 제한**: 트랙①의 `closed_form`·`linear_static_complex`만. 피로·비선형은 마일스톤 모드 강제. 게이트 강건성이 실측으로 확인된 범위만 개방한다는 제안서 원칙의 실행형 — **P5 개방 시점에 `linear_static_complex` 포함 여부는 P3 실측치(게이트 1회 통과율·ADVISORY 판정 품질)를 조건으로 재확인한다. 시간 순서가 아니라 데이터가 개방을 결정한다.**
 
 ### 6.3 환류 루프 (자가개선)
 
 - 입력원: 승인·반려 사유, self_correction 기록(에러 시그니처→해결책), 완료 해석의 노하우, Q&A 로그(지식 갭 신호 — 수집은 프롬프트 규약: 세션 중 반복·미답 질문을 에이전트가 `wiki/inbox/`에 적재. 강제 메커니즘 아님을 명기).
-- `/환류` command(또는 주기 배치): `wiki/inbox/` + events를 정리해 **사례 카드·플레이북·표준 개정 제안 초안** 생성 → **사람 승인 후** `harness/` 반영(하네스 개정도 게이트를 거친다).
+- `/환류` command(또는 주기 배치): `wiki/inbox/` + events를 정리해 **사례 카드·플레이북·표준 개정 제안 초안** 생성 → **사람 승인 후 인간(비에이전트 프로세스)이 `harness/`에 반영**한다 — D8에 따라 에이전트는 승인 이후에도 적용 주체가 될 수 없다(하네스 개정도 게이트를 거친다).
 - 강건화 계측: 게이트 1회 통과율↑ · 동일 에러 재발률↓ · 자가수정 횟수↓ (§12와 동일 원장).
 
 ---
@@ -360,7 +367,7 @@ python -m cae_tools.runners.<solver> status  --job-dir <dir>                 →
 python -m cae_tools.runners.<solver> collect --job-dir <dir>                 → result.json + extracted/*.csv
 ```
 
-- **submit은 detach 실행** — Claude 세션 종료와 무관하게 해석 지속, 재접속 후 collect(수시간 잡 대응).
+- **submit은 detach 실행** — Claude 세션 종료와 무관하게 해석 지속, 재접속 후 collect(수시간 잡 대응). `job_ticket.json`에 `job_id`를 기록하고 collect가 manifest의 job_id와 대조한다(오귀속 방지 — §3.2).
 - `result.json` 공통 스키마:
 
 ```jsonc
@@ -392,14 +399,14 @@ python -m cae_tools.runners.<solver> collect --job-dir <dir>                 →
 
 ### 7.4 하중이력 분석기
 
-- `cae_tools/analysis/load_history.py`: 입력 `.req`·`.rsp` **모두** → rainflow 카운팅, 채널별 손상 추정(Miner), Damage Rose(주손상 방향), **지배 하중케이스 랭킹** → `load_analysis.json` + 시각화 PNG. (주하중방향 시각화 PoC 이식)
+- `cae_tools/analysis/load_history.py`: 입력 `.req`·`.rsp` **모두** → rainflow 카운팅, 채널별 손상 추정(Miner), Damage Rose(주손상 방향), **지배 하중케이스 랭킹** → `jobs/<id>/results/load_analysis.json` + 시각화 PNG (에이전트 쓰기 차단 경로 — §5 증거 보호). (주하중방향 시각화 PoC 이식)
 - 출력이 트랙② S0 산출물이자 **G3-피로 "지배 하중케이스 정합" 체크의 기준값** — 분석과 검증이 같은 데이터를 공유.
 
 ### 7.5 보고 빌더 (pptx)
 
 - `report build --job <id> [--official]`: **python-pptx 기반 사내 표준 양식 템플릿 치환** + LLM 작성 섹션(요약·근거·트레이드오프) + **게이트 증빙 자동 첨부**(manifest에서 게이트 결과·승인 이력).
 - 시각화: agent_cae3 `html_report` 렌더러 이식(헤드리스 matplotlib — 컨투어·이력 차트)→ PNG를 pptx에 삽입.
-- 빌더는 pptx 생성 직후 **내장 보고서 린트**(§4.1)를 실행하고 결과를 gate-record로 기록한다 — pptx는 에이전트 Edit 경로 밖(바이너리, 빌더 생성물)이므로 PostToolUse 대신 빌더가 트리거를 겸한다.
+- 빌더는 pptx 생성 직후 `pilot gate-run G1 <pptx> --job <id>`를 호출한다 — 린트는 pilot 안의 검증기가 수행(계산형 §4.4). pptx는 에이전트 Edit 경로 밖(바이너리, 빌더 생성물)이므로 PostToolUse 대신 빌더가 트리거를 겸한다.
 - `--official`은 M3 승인 필수(훅). 미승인·셀프서비스는 '사전검토용' 워터마크.
 - 협의자료 초안: Skill이 대책 요약·근거·트레이드오프·증빙 구조로 작성 → G1 보고서 린트(필수 섹션·출처 인용) 통과 필수.
 
@@ -433,7 +440,7 @@ cae-copilot/
 │  ├─ agents/                 # gate2-reviewer.md
 │  ├─ hooks/                  # pre_tool_use.py post_tool_use.py stop.py session_start.py
 │  └─ settings.json           # 권한 allowlist + 훅 등록
-├─ pilot/                     # job 관리 CLI · tracks/*.yaml · metrics 집계
+├─ pilot/                     # job 관리 CLI · tracks/*.yaml · metrics 집계 · runtime/(훅 전용 전달 경로 — D8 보호, §4.2)
 ├─ gates/                     # g1_lint/ (deck·mesh·report) · g3_physics/ (theory·평형·실적대조)
 ├─ cae_tools/
 │  ├─ hm_mcp/                 # MCP 서버 (bridge 클라이언트)
@@ -447,7 +454,7 @@ cae-copilot/
 │  ├─ cases/                  # 사례 카드 = 실적 범위 DB
 │  ├─ templates/              # 덱 템플릿 · nCode flow 템플릿 · pptx 양식
 │  └─ wiki/                   # inbox/ (환류 수집) → 정리된 카드
-├─ jobs/                      # ACTIVE 포인터 + <job_id>/ (manifest·events·cards·decks·results·reports)
+├─ jobs/                      # <job_id>/ (manifest·events·cards·decks·results·reports) — 세션 컨텍스트는 CAE_JOB_ID(§3.2)
 └─ tests/                     # 게이트 FAIL 검출 · 훅 우회 시도 · Mock E2E
 ```
 
@@ -472,9 +479,10 @@ cae-copilot/
 ### 10.2 보안·권한
 
 - 운영 전 과정 사내망, 데이터 외부 반출 없음(제안서 2.7).
-- `settings.json` allowlist: hm_mcp 도구 / `python -m cae_tools.*`·`python -m gates.*`·`python -m pilot` Bash prefix / Read·Edit는 리포+jobs 범위. 운영 프로파일에서 웹 접근 deny. **deny가 allow에 우선**: `pilot approve`·`pilot gate-record`의 에이전트 호출 차단(§5)은 allowlist 안에서도 유효하다.
+- `settings.json` allowlist: hm_mcp 도구 / `python -m cae_tools.*`·`python -m gates.*`·`python -m pilot` Bash prefix / Read는 리포+jobs 범위. **Edit/Write 허용은 네거티브형으로 정의한다(차단 의도의 SSOT는 §5)**: `jobs/**`에서 manifest·events·`results/**`·`gates/**`를 **제외한 전부**(decks·reports 원고·cards·plan 등 에이전트 산출물) + `harness/wiki/inbox/**`. 그 외 리포 전체 — 집행 기계류(`gates/`·`harness/` 나머지·`pilot/`·`.claude/`·`CLAUDE.md`) — 는 쓰기 차단(D8·§5). 러너·분석기·pilot은 서브프로세스 파일 IO로 기록하므로 무영향. 운영 프로파일에서 웹 접근 deny. **deny가 allow에 우선**: `pilot approve`·G2 기록의 에이전트 호출 차단(§5)은 allowlist 안에서도 유효하다.
 - manifest 무결성(§3.5): 장부 조작에 의한 게이트 우회 경로 봉쇄.
 - 에이전트는 사용자 계정 권한·라이선스 범위 내 실행. 공식 판정 권한은 엔지니어 유지(M3 + `--official` 훅).
+- **D8의 적용 경계**: 위 차단은 **운영 에이전트 세션**(해석 업무 수행)용 설정이다. cae-copilot 자체를 개발하는 세션(P0~P5에서 gates/·pilot/·hooks 구현)은 별도 설정(settings.local 또는 하네스 미로딩 작업 트리)을 쓴다 — 이 구분이 없으면 P0 첫날 자기 리포를 수정할 수 없다. `tests/**`도 운영 세션에서는 쓰기 불가(의도된 제한).
 - GUI 헤드(ClaudeApp 계열) 채택 시 default-DENY 정책과 본 리포 allowlist의 정합 확인(P-GUI 착수 체크 항목).
 
 ---
@@ -482,7 +490,7 @@ cae-copilot/
 ## 11. 검증 전략 — 이 시스템이 옳음을 어떻게 아는가
 
 1. **단위 — FAIL 검출 우선 원칙.** 게이트 검증기 테스트는 **의도적 오류 주입 코퍼스**(단위 틀린 덱, 필드 밀린 .bdf, 반력 불일치 결과, 실적 범위 밖 수명 등)를 "잡아내는지"로 작성한다. PASS 케이스만 테스트하는 자기만족을 금지한다 — 검증기의 존재 증명은 "맞혔다"가 아니라 **"틀린 것을 잡는다"**(동어반복 함정의 테스트 규약화).
-2. **통합 — Mock E2E + 우회 시도 테스트.** 트랙① 합성 케이스 완주에 더해 **적대적 시나리오가 1급 테스트**: 승인 없이 솔버 호출→차단 / 게이트 FAIL 상태로 전진→차단 / manifest 직접 수정→거부 / **에이전트가 `pilot approve` 호출→차단 / 에이전트가 `gate-record` 직접 호출→차단 / 훅·빌더 경유 gate-record는 통과(정상 경로 보존, §6.1 2차 잠금의 approve 한정 검증)** / 자가복구 상한 초과→중단 / `!` 직접 실행의 세션 마커 상속 여부 실증(§6.1). 보조: criteria yaml의 `source` 인용이 standards 문서에 실존하는지 검사하는 스테일 참조 테스트.
+2. **통합 — Mock E2E + 우회 시도 테스트.** 트랙① 합성 케이스 완주에 더해 **적대적 시나리오가 1급 테스트**: 승인 없이 솔버 호출→차단 / 게이트 FAIL 상태로 전진→차단 / manifest 직접 수정→거부 / **에이전트가 `pilot approve` 호출→차단 / 에이전트의 G2 기록 직접 호출→차단 / 검증기·기준·훅·tracks 등 기계류 Edit→차단(D8) / result.json·load_analysis 등 증거 파일 Edit→차단(§5) / 게이트 기록 후 산출물 재수정→advance가 해시 불일치로 거부(TOCTOU, §3.4) / 크래시 복구: events 선기록 후 중단→`pilot rebuild`로 manifest 재생성(§3.5)** / 자가복구 상한 초과→중단 / `!` 직접 실행의 세션 마커 상속 여부 실증(§6.1). 보조: criteria yaml의 `source` 인용이 standards 문서에 실존하는지 검사하는 스테일 참조 테스트.
 3. **실측 — 운영 파일럿.** 실 부품 케이스로 지표 5종 수집 + 엔지니어 병행 기록. **무개입 완주율 80%는 목표치이며 실측으로 확정**한다(실측치/목표치 구분 유지 — 제안서 층위 그대로).
 
 ---
@@ -501,7 +509,7 @@ cae-copilot/
 
 **`human_intervention`의 기록 경로(3중)**: ① 자동 — 자가복구 상한 초과 paused, 게이트 override(훅·pilot이 기록). ② 사람 직접 — `pilot intervene --reason`(수동 수정·수동 재실행 시 엔지니어가 기록). ③ 보조 — 세션 중 사람의 수동 개입을 에이전트가 인지하면 기록 의무(Skill 규율). **완전 자동 감지가 아니며**, 파일럿 중 ②의 준수가 지표 신뢰도의 전제다.
 
-**게이트 1회 통과율의 집계 단위**: 분모 = 단계-출구 게이트 인스턴스(단계×게이트)의 최초 실행. 단계 내 자동 재실행(예: 자가복구 중 덱 재편집마다 도는 G1)은 분모에서 제외하고 `self_correction` 신호로 계수한다 — 두 지표의 역할 분리(관문 품질 vs 수정 횟수). 초안 반복이 많은 단계에서는 자연히 낮게 나오는 특성이 있으므로 파일럿 보고 시 해석 주석을 병기한다.
+**게이트 1회 통과율의 집계 단위**: 분모 = 단계-출구 게이트 인스턴스(단계×게이트)의 최초 실행. 동일 게이트 인스턴스의 최초 이후 재실행(seq 기준, §3.6 — 예: 자가복구 중 덱 재편집마다 도는 G1)은 분모에서 제외하고 `self_correction` 신호로 계수한다 — 두 지표의 역할 분리(관문 품질 vs 수정 횟수). 초안 반복이 많은 단계에서는 자연히 낮게 나오는 특성이 있으므로 파일럿 보고 시 해석 주석을 병기한다.
 
 **절감시간의 단위 구분**: `milestone_requested→approval` 간격은 벽시계 리드타임이라 야간·부재 대기를 포함한다. 맨아워 절감(제안서 산식의 단위)은 엔지니어 병행 기록이 기준이고, 원장 간격은 리드타임 보조 지표로만 쓴다(단위 혼합 시 왜곡·음수 가능).
 
