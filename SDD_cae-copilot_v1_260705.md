@@ -1,8 +1,8 @@
 # SDD — cae-copilot: 버추얼 성능개발(CAE) 통합 지능화·자동화 파일럿
 
-- **버전**: v1.6 (2026-07-07)
-- **상태**: P0 구현·수동실증 완료 반영 — 코드 근거로 갱신(§3.2·3.3·3.5·3.6·4.4·5·6.1·10.2·15)
-- **이력**: v1.1 (2026-07-05) — 스펙 리뷰 1차 반영: 전이 충족 의미론 신설(§3.6), 승인 채널 분리(§6.1), 마일스톤 반려 전이 정의, 지표 산출성 정정(§0.2·§12), 구현 페이즈 P-넘버링(§13), tool_class 전수 매핑(§7.1) / v1.2 (2026-07-05) — 스펙 리뷰 2차 반영: 전진 공식 예외 2건(셀프서비스 ③ 면제·override FAIL 무효화), §2.2 승인 흐름 정정, tool_class 참조 단일화(§5→§3.1), pilot 명령 표면 보완(intervene·milestone_requested 기록 주체), 승인 2차 잠금, 지표 단위·해석 주석 / v1.3 (2026-07-05) — 스펙 리뷰 3차 반영: 2차 잠금을 approve 한정으로 정정(훅·빌더의 gate-record 정상 경로 보존), P0 테스트 항목 보강. 최종 승인(4차) 후 advisory 2건 추가 반영: gate-record 호출자 마커 스탬프(감사 실효화)·`!` 마커 상속 실증의 §11.2 병기 / v1.4 (2026-07-05) — GUI 전략 반영(사용자 검토 결정): 프론트엔드 2-헤드 원칙(D7), 승인 채널 일반화(§6.1), 승인 카드 파일화, P-GUI 페이즈 신설(§13), SDK/CLI 하네스 동등성 스모크(§15); 확인 패스 advisory 5건 반영(D7 데이터소스에 GateResult·harness 문서 추가, verdict의 manifest 직접 렌더링, 카드 seq 버전링, 동등성 스모크에 승인 채널 행동 포함, 표기 정렬 2건) / v1.5 (2026-07-05) — Codex 적대적 리뷰 재검토 반영: 게이트 기록 계산형 전환(gate-record 폐지 → gate-run, target_sha TOCTOU 대조), 집행 기계류 에이전트 쓰기 차단 신설(D8), jobs/ACTIVE 폐지·CAE_JOB_ID 단일화·쓰기 명령 --job 필수, events 선기록·원자적 manifest·pilot rebuild(§3.5), 셀프서비스 보강 2건(워터마크 판정 등급·P5 조건부 개방); 확인 패스 4건 반영(게이트 인스턴스 귀속 규칙·G2 보호 경로 입력 검증·증거 파일 쓰기 차단·SSOT 용어 정리) + advisory 4건(환류 반영 주체 인간 명시·CAE_JOB_ID 설정 주체·D8 적용 경계·SessionStart 표기); 최종 확인 1건 반영(§10.2 allowlist 네거티브형 전환 — S0 plan.md 교착 해소, 차단 SSOT를 §5로 단일화) + 표기 정렬 3건(§12 인스턴스 언어·§3.4 requires 병기·§9 runtime/ 트리 반영) / v1.6 (2026-07-07) — P0 구현·수동실증 완료 반영(Task 16.3): 개정 노트 8건 — job_created·stage_paused 이벤트 추가·gate_pass/gate_fail 발화 폐지(§3.3), gates 슬롯 게이트×대상 2계층(§3.2·§3.6, Codex F3), 원장 쓰기 job별 파일락 직렬화·개행 커밋 정의(§3.5, Codex F1·F2), override target_sha 바인딩(§4.4, Codex F4), D8 개발 이스케이프 `CAE_COPILOT_DEV_UNLOCK` 명문화(§10.2), paused 해제 = `intervene --resume`·상한 윈도 재정의(§5), paused 단계 편집 하드 차단(§5, F#1), Bash 쓰기 경계·Windows 훅 문법 명문화(§5·§10.2, 최종 리뷰 I1a); 수동실증 findings 3건 — Windows `${CLAUDE_PROJECT_DIR}` 필수(§5), `!`·CLAUDECODE 상속 확정 → 승인채널 = 별도 터미널(§6.1), Stop 훅 턴별 발화 누적 미결 등재(§15)
+- **버전**: v1.7 (2026-07-10)
+- **상태**: P1 구현 완료 반영 — hm_mcp(45 노출)·G1 덱 린트 구현 근거로 갱신(§4.1·5·7.1·15)
+- **이력**: v1.1 (2026-07-05) — 스펙 리뷰 1차 반영: 전이 충족 의미론 신설(§3.6), 승인 채널 분리(§6.1), 마일스톤 반려 전이 정의, 지표 산출성 정정(§0.2·§12), 구현 페이즈 P-넘버링(§13), tool_class 전수 매핑(§7.1) / v1.2 (2026-07-05) — 스펙 리뷰 2차 반영: 전진 공식 예외 2건(셀프서비스 ③ 면제·override FAIL 무효화), §2.2 승인 흐름 정정, tool_class 참조 단일화(§5→§3.1), pilot 명령 표면 보완(intervene·milestone_requested 기록 주체), 승인 2차 잠금, 지표 단위·해석 주석 / v1.3 (2026-07-05) — 스펙 리뷰 3차 반영: 2차 잠금을 approve 한정으로 정정(훅·빌더의 gate-record 정상 경로 보존), P0 테스트 항목 보강. 최종 승인(4차) 후 advisory 2건 추가 반영: gate-record 호출자 마커 스탬프(감사 실효화)·`!` 마커 상속 실증의 §11.2 병기 / v1.4 (2026-07-05) — GUI 전략 반영(사용자 검토 결정): 프론트엔드 2-헤드 원칙(D7), 승인 채널 일반화(§6.1), 승인 카드 파일화, P-GUI 페이즈 신설(§13), SDK/CLI 하네스 동등성 스모크(§15); 확인 패스 advisory 5건 반영(D7 데이터소스에 GateResult·harness 문서 추가, verdict의 manifest 직접 렌더링, 카드 seq 버전링, 동등성 스모크에 승인 채널 행동 포함, 표기 정렬 2건) / v1.5 (2026-07-05) — Codex 적대적 리뷰 재검토 반영: 게이트 기록 계산형 전환(gate-record 폐지 → gate-run, target_sha TOCTOU 대조), 집행 기계류 에이전트 쓰기 차단 신설(D8), jobs/ACTIVE 폐지·CAE_JOB_ID 단일화·쓰기 명령 --job 필수, events 선기록·원자적 manifest·pilot rebuild(§3.5), 셀프서비스 보강 2건(워터마크 판정 등급·P5 조건부 개방); 확인 패스 4건 반영(게이트 인스턴스 귀속 규칙·G2 보호 경로 입력 검증·증거 파일 쓰기 차단·SSOT 용어 정리) + advisory 4건(환류 반영 주체 인간 명시·CAE_JOB_ID 설정 주체·D8 적용 경계·SessionStart 표기); 최종 확인 1건 반영(§10.2 allowlist 네거티브형 전환 — S0 plan.md 교착 해소, 차단 SSOT를 §5로 단일화) + 표기 정렬 3건(§12 인스턴스 언어·§3.4 requires 병기·§9 runtime/ 트리 반영) / v1.6 (2026-07-07) — P0 구현·수동실증 완료 반영(Task 16.3): 개정 노트 8건 — job_created·stage_paused 이벤트 추가·gate_pass/gate_fail 발화 폐지(§3.3), gates 슬롯 게이트×대상 2계층(§3.2·§3.6, Codex F3), 원장 쓰기 job별 파일락 직렬화·개행 커밋 정의(§3.5, Codex F1·F2), override target_sha 바인딩(§4.4, Codex F4), D8 개발 이스케이프 `CAE_COPILOT_DEV_UNLOCK` 명문화(§10.2), paused 해제 = `intervene --resume`·상한 윈도 재정의(§5), paused 단계 편집 하드 차단(§5, F#1), Bash 쓰기 경계·Windows 훅 문법 명문화(§5·§10.2, 최종 리뷰 I1a); 수동실증 findings 3건 — Windows `${CLAUDE_PROJECT_DIR}` 필수(§5), `!`·CLAUDECODE 상속 확정 → 승인채널 = 별도 터미널(§6.1), Stop 훅 턴별 발화 누적 미결 등재(§15) / v1.7 (2026-07-10) — P1 구현 완료 반영: 개정 노트 8건 — 덱 export 프로파일 실물 2종 `fmt: "OS" | "Abaqus"`·Nastran .bdf export는 P2에서 러너와 함께 검토(§7.1), 메시 품질 체크 P2 이연·S1 출구 G1은 export된 덱 린트로 성립(§4.1), 이식 규모 명세화 = 43 이식 + 2 노출 추가(`hm_get_materials`·`hm_get_bridge_status`) = 45 노출·솔버 실행 2종 제외(§7.1), export-후 G1 트리거 = PostToolUse가 `mcp__hm__hm_export_*` 매칭·성공 응답만 검증·`success≠true`→`export-failed` ERROR로 stale 덱 PASS 차단·대상 `deck_path` 우선(§4.1·5, Codex F2), session_summary dedup 해소(§15), G1 미지원 대상 = `unsupported-target`·미지원 카드 형식 = `unsupported-card-format` = ERROR fail-closed(§4.1, Codex F3), 에러 정규화 3패밀리 `[hm_mcp:connection|timeout|rpc:<Type>]` 고정(§7.1), RP 동적 계산 체인 노출명 `hm_get_bounding_box`→`hm_create_nodeset_by_box`(§7.1)
 - **상위 문서(WHAT의 SSOT)**: `공모전_제안서_통합플랫폼_v6_260705(최종제출).md` — 본 SDD는 그 제안을 실제 구현하기 위한 HOW를 정의한다. 두 문서가 충돌하면 제안서의 "무엇·왜"가 우선하고, 본 SDD의 "어떻게"가 그것을 실현하는 수단이다.
 - **시스템 가칭**: `cae-copilot` (리포지토리명, 변경 가능)
 
@@ -257,11 +257,12 @@ rules:
 
 ### 4.1 G1 — 표준 준수 (결정론 Python, 상시·저비용)
 
-- **트리거**: PostToolUse 자동 — `decks/**`·`reports/**` Edit/Write, HM 덱 export 후. 수동 호출도 가능.
+- **트리거**: PostToolUse 자동 — `decks/**`·`reports/**` Edit/Write, HM 덱 export 후(matcher가 `mcp__hm__hm_export_*` 완료를 매칭 — **성공 응답만 검증 경로**: `success≠true`·불명 응답은 대상 파일 잔존 시 `export-failed` ERROR로 stale 덱 PASS를 차단하고, 린트 대상은 응답 `deck_path` 우선·입력 `path` 폴백 — §5·Codex F2). 수동 호출도 가능.
 - **검사 대상별 체크**:
   - 덱 린트: 단위계(mm-t-s: E=210000 MPa, ρ=7.85e-9 t/mm³), 필수 카드/키워드, **Nastran 고정폭 필드 정렬**, 재질–프로퍼티–섹션 연결 무결성, 사내 표준(명명 규칙·출력 요청 세트)
-  - 메시 품질: S1 출구에서 hm_mcp 품질 리포트를 `harness/criteria/mesh_quality.yaml` 기준과 대조
+  - 메시 품질: **P2 이연**(hm-assistant에 품질 리포트 도구 부재 — 사용자 결정 2026-07-07). P1의 S1 출구 G1은 "export된 덱의 린트"로 성립하며, 메시 품질 대조(S1 출구에서 hm_mcp 품질 리포트를 `harness/criteria/mesh_quality.yaml` 기준과 대조)는 P2에서 증보
   - 보고서 린트: 필수 섹션 존재, **출처 인용 존재(무출처 차단)**, 수치–단위 표기. 트리거 2경로 — 원고(md, LLM 작성 섹션)는 PostToolUse 자동, 최종 pptx는 빌더가 `pilot gate-run` 호출(§7.5)
+- **미지원 대상·형식 = ERROR(fail-closed D6)**: G1 라우터가 `.fem`/`.inp` 밖 확장자(예: `reports/*.md` — 보고서 린트는 P2)를 만나면 verdict **ERROR**(check `unsupported-target`). 같은 원칙으로 `.fem` 내부의 미지원 카드 형식(large-field `*`·연속 `+`)도 **ERROR**(check `unsupported-card-format`) — 조용한 무시는 false PASS를 낳는다(Codex 적대 리뷰 2026-07-07 F3). P2에서 보고서·pptx 린터 등록·실기 export 샘플 기반 파서 확장으로 해소.
 - **기준의 이중 표현**: 사람용 `harness/standards/*.md` ↔ 기계용 `harness/criteria/*.yaml` 쌍. 모든 체크의 `source` 필드가 문서 절을 인용해 동기화를 강제.
 
 ### 4.2 G2 — 추론 검증 (LLM 서브에이전트, 중간 비용)
@@ -307,7 +308,7 @@ rules:
 | PreToolUse | 증거·계기판 Edit/Write — `jobs/**/results/**`(result.json·extracted·`load_analysis.json`)·`jobs/**/gates/**`(GateResult 파일) | **차단** — G3가 읽는 입력·게이트 증빙은 러너·분석기·pilot(서브프로세스 파일 IO)만 기록. "결과를 고쳐 G3를 통과"하는 오염 벡터 봉쇄 — 동어반복 검증 함정의 파일시스템 재진입 차단(D5의 인식론적 독립 보전) |
 | PreToolUse | 에이전트의 `pilot approve`(승인·반려·override)·G2 기록 호출 | **무조건 차단** — 승인은 인간 전용 채널(§6.1), G2 기록은 SubagentStop 훅 전용(§4.2). ※ gate-run(G1·G3)은 계산형이라 차단 불요(§4.4) |
 | PreToolUse | 보고서 빌더 `--official` | M3 승인 필수. 미승인·셀프서비스 → '사전검토용' 워터마크 강제 |
-| PostToolUse | `decks/**`·`reports/**` Edit/Write, HM export | **`pilot gate-run G1` 자동 호출**(계산형 §4.4) → 기록, FAIL 시 체크리스트 반환(수정 유도) |
+| PostToolUse | `decks/**`·`reports/**` Edit/Write, `mcp__hm__hm_export_*` 완료 | **`pilot gate-run G1` 자동 호출**(계산형 §4.4) → 기록, FAIL 시 체크리스트 반환(수정 유도). export 경로는 **성공 응답만 검증**(`success≠true`·불명 → 대상 파일 잔존 시 `export-failed` ERROR로 stale 덱 PASS 차단), 린트 대상 = 응답 `deck_path` 우선(입력 `path` 폴백) — Codex F2 |
 | PostToolUse | 러너 종료 | result.json 파싱·기록, 에러 시 error_classifier 시그니처 로깅 |
 | SubagentStop | gate2-reviewer 완료 | 결과 파싱 → G2 기록(`gate-run G2 --from-subagent <결과파일>`) — 메인 에이전트 미경유(§4.2) |
 | Stop | 에이전트 턴 종료(주의: "세션 완전 종료"가 아님 — §15) | 미결 게이트·미승인 마일스톤 요약 **경고(차단 아님)** + `session_summary` 이벤트 기록 |
@@ -357,11 +358,11 @@ Claude Code ←(MCP stdio)→ hm_mcp (신규, thin 릴레이)
 ```
 
 - bridge는 이 리포로 **vendor 복사**(fork-copy, 출처 명기) — 파일럿을 단일 배포물로. hm-assistant는 독립 유지.
-- hm_mcp 역할: 도구 스키마 노출, RPC 중계, 재연결·타임아웃, 에러 정규화. **로직 없음.**
+- hm_mcp 역할: 도구 스키마 노출, RPC 중계, 재연결·타임아웃, 에러 정규화(실패 메시지 3패밀리 고정 — `[hm_mcp:connection|timeout|rpc:<Type>] <원인·다음 행동>`). **로직 없음.**
 - **명명 규칙 = 훅 게이팅의 지탱점**: `hm_get_*`(조회) / `hm_create_*`·`hm_set_*`·`hm_delete_*`·`hm_import_*`·`hm_mesh_*`·`hm_export_*`(변형·부수효과). `execute_tcl_safe`는 hm_mutate 클래스에 명시 등재. **전수 매핑 보증**: hm_mcp 서버는 기동 시 등록 도구 전체가 조회/변형 클래스 중 하나에 매칭되는지 자체 검사하고, 미분류 도구가 있으면 기동을 거부한다(fail-closed).
-- 도구 카테고리(hm-assistant 45 @tool 이식): 조회(모델트리·컴포넌트·품질리포트·바운딩박스·선택 엔티티), CAD 임포트(2026.1 API 검증분), 메시(tetmesh volume-only 기본), 물성·프로퍼티, 하중·BC(node-based·박스 선택), 덱 export(Abaqus/OptiStruct/Nastran 프로파일), `execute_tcl_safe`(화이트리스트만).
+- 도구 카테고리(hm-assistant **43 이식 + 2 노출 추가 = 45 노출**): 조회(모델트리·컴포넌트·바운딩박스·선택 엔티티), CAD 임포트(2026.1 API 검증분), 메시(tetmesh volume-only 기본), 물성·프로퍼티, 하중·BC(node-based·박스 선택), 덱 export(실물 2종 — `fmt: "OS" | "Abaqus"`; Nastran .bdf export는 P2에서 러너와 함께 추가 검토 — §7.2 .op2 경로 전제), `execute_tcl_safe`(화이트리스트만). 제외 2종 = 솔버 실행(`submit_analysis`·`check_job_status`) — `cae_tools.runners`(P2) 소관(MCP 경로로 두면 `solver_run` 게이팅 우회). 추가 2종 = `hm_get_materials`(bridge RPC 기존·@tool 미노출을 S2 재료 확인 조회로 노출)·`hm_get_bridge_status`(신규 — 연결 진단, 위 에러 정규화의 가시화).
 - **hm-assistant 5대 원칙 전면 계승** — 집행 위치 3중(MCP 인자 검증 + G1 + Skill 지침):
-  mm 단위 강제 / node-based BC / volume-only tet / RP 동적 계산(`get_bounding_box`→`select_nodes_by_box` 체인) / TCL raw 노출 금지.
+  mm 단위 강제 / node-based BC / volume-only tet / RP 동적 계산(`hm_get_bounding_box`→`hm_create_nodeset_by_box` 체인) / TCL raw 노출 금지.
 - `hm_get_*` 조회 도구가 곧 **세션 컨텍스트 브리지**: "이 부품 응력이 왜 높지?" 류 지시어 질문에 모델트리·선택 엔티티·최신 결과를 조회해 즉답. 대형 FE 모델은 컨텍스트에 담지 않고 질의 도구로 조회(제안서 2.6).
 
 ### 7.2 솔버 러너 — 공통 CLI 계약
@@ -562,7 +563,7 @@ P5 성숙       환류 자동화 + 지표 집계 + 셀프서비스 모드 개방
 | 사내 반입·설치 제약 | P3 | 반입 절차 사전 확인. bridge는 표준 라이브러리+hwx만(기존 규칙), 나머지는 통상 pip |
 | 다중 사용자 승인 진본성 | 확산(Phase 2+) | Phase 1 신뢰 경계 = 단일 사용자 계정(§6.1). 확산 시 승인자 인증 채널 설계 |
 | SDK/CLI 하네스 동등성 (GUI 헤드) | P-GUI | ClaudeApp은 격리 목적으로 `setting_sources=[]`로 하네스 로딩을 껐음 — GUI 헤드는 project 로딩을 켜야 하며, hooks 발화·Skills 로딩·승인 채널 행동(패널 approve 통과 + 세션 내 에이전트 approve 차단)의 SDK/CLI 동등성을 P-GUI 착수 스모크(§11.2 우회 스위트 재실행 포함)로 실증 |
-| Stop 훅 session_summary 중복 누적 (실증 발견 — Task 16.2) | 원장 팽창 | Claude Code Stop 훅은 "세션 종료"가 아니라 **매 에이전트 턴 종료**마다 발화 → 상태 불변이어도 동일 `session_summary`가 append-only 원장에 누적. `harness/wiki/inbox/stop-hook-summary-accumulation.md` 제안 등재, P1에서 dedup(직전과 동일 요약이면 미기록) 또는 종료요약 1회화 검토 |
+| Stop 훅 session_summary 중복 누적 (실증 발견 — Task 16.2) | 원장 팽창 | Claude Code Stop 훅은 "세션 종료"가 아니라 **매 에이전트 턴 종료**마다 발화 → 상태 불변이어도 동일 `session_summary`가 append-only 원장에 누적. **P1 해소(dedup 채택)** — Stop 훅이 직전 `session_summary`와 payload가 동일하면 기록 생략(정보 무손실). `harness/wiki/inbox/stop-hook-summary-accumulation.md` 제안 반영 |
 
 ---
 
