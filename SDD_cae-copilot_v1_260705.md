@@ -1,8 +1,8 @@
 # SDD — cae-copilot: 버추얼 성능개발(CAE) 통합 지능화·자동화 파일럿
 
-- **버전**: v1.8 (2026-07-11)
-- **상태**: Codex 적대 리뷰(P1 브랜치) 트리아지 반영 — 게이트 대상 격리·G1 데이터-완비성 하드닝 + 벤더 브리지 P2/P3 백로그 등재(§4.1·4.4·10.2·15)
-- **이력**: v1.1 (2026-07-05) — 스펙 리뷰 1차 반영: 전이 충족 의미론 신설(§3.6), 승인 채널 분리(§6.1), 마일스톤 반려 전이 정의, 지표 산출성 정정(§0.2·§12), 구현 페이즈 P-넘버링(§13), tool_class 전수 매핑(§7.1) / v1.2 (2026-07-05) — 스펙 리뷰 2차 반영: 전진 공식 예외 2건(셀프서비스 ③ 면제·override FAIL 무효화), §2.2 승인 흐름 정정, tool_class 참조 단일화(§5→§3.1), pilot 명령 표면 보완(intervene·milestone_requested 기록 주체), 승인 2차 잠금, 지표 단위·해석 주석 / v1.3 (2026-07-05) — 스펙 리뷰 3차 반영: 2차 잠금을 approve 한정으로 정정(훅·빌더의 gate-record 정상 경로 보존), P0 테스트 항목 보강. 최종 승인(4차) 후 advisory 2건 추가 반영: gate-record 호출자 마커 스탬프(감사 실효화)·`!` 마커 상속 실증의 §11.2 병기 / v1.4 (2026-07-05) — GUI 전략 반영(사용자 검토 결정): 프론트엔드 2-헤드 원칙(D7), 승인 채널 일반화(§6.1), 승인 카드 파일화, P-GUI 페이즈 신설(§13), SDK/CLI 하네스 동등성 스모크(§15); 확인 패스 advisory 5건 반영(D7 데이터소스에 GateResult·harness 문서 추가, verdict의 manifest 직접 렌더링, 카드 seq 버전링, 동등성 스모크에 승인 채널 행동 포함, 표기 정렬 2건) / v1.5 (2026-07-05) — Codex 적대적 리뷰 재검토 반영: 게이트 기록 계산형 전환(gate-record 폐지 → gate-run, target_sha TOCTOU 대조), 집행 기계류 에이전트 쓰기 차단 신설(D8), jobs/ACTIVE 폐지·CAE_JOB_ID 단일화·쓰기 명령 --job 필수, events 선기록·원자적 manifest·pilot rebuild(§3.5), 셀프서비스 보강 2건(워터마크 판정 등급·P5 조건부 개방); 확인 패스 4건 반영(게이트 인스턴스 귀속 규칙·G2 보호 경로 입력 검증·증거 파일 쓰기 차단·SSOT 용어 정리) + advisory 4건(환류 반영 주체 인간 명시·CAE_JOB_ID 설정 주체·D8 적용 경계·SessionStart 표기); 최종 확인 1건 반영(§10.2 allowlist 네거티브형 전환 — S0 plan.md 교착 해소, 차단 SSOT를 §5로 단일화) + 표기 정렬 3건(§12 인스턴스 언어·§3.4 requires 병기·§9 runtime/ 트리 반영) / v1.6 (2026-07-07) — P0 구현·수동실증 완료 반영(Task 16.3): 개정 노트 8건 — job_created·stage_paused 이벤트 추가·gate_pass/gate_fail 발화 폐지(§3.3), gates 슬롯 게이트×대상 2계층(§3.2·§3.6, Codex F3), 원장 쓰기 job별 파일락 직렬화·개행 커밋 정의(§3.5, Codex F1·F2), override target_sha 바인딩(§4.4, Codex F4), D8 개발 이스케이프 `CAE_COPILOT_DEV_UNLOCK` 명문화(§10.2), paused 해제 = `intervene --resume`·상한 윈도 재정의(§5), paused 단계 편집 하드 차단(§5, F#1), Bash 쓰기 경계·Windows 훅 문법 명문화(§5·§10.2, 최종 리뷰 I1a); 수동실증 findings 3건 — Windows `${CLAUDE_PROJECT_DIR}` 필수(§5), `!`·CLAUDECODE 상속 확정 → 승인채널 = 별도 터미널(§6.1), Stop 훅 턴별 발화 누적 미결 등재(§15) / v1.7 (2026-07-10) — P1 구현 완료 반영: 개정 노트 8건 — 덱 export 프로파일 실물 2종 `fmt: "OS" | "Abaqus"`·Nastran .bdf export는 P2에서 러너와 함께 검토(§7.1), 메시 품질 체크 P2 이연·S1 출구 G1은 export된 덱 린트로 성립(§4.1), 이식 규모 명세화 = 43 이식 + 2 노출 추가(`hm_get_materials`·`hm_get_bridge_status`) = 45 노출·솔버 실행 2종 제외(§7.1), export-후 G1 트리거 = PostToolUse가 `mcp__hm__hm_export_*` 매칭·성공 응답만 검증·`success≠true`→`export-failed` ERROR로 stale 덱 PASS 차단·대상 `deck_path` 우선(§4.1·5, Codex F2), session_summary dedup 해소(§15), G1 미지원 대상 = `unsupported-target`·미지원 카드 형식 = `unsupported-card-format` = ERROR fail-closed(§4.1, Codex F3), 에러 정규화 3패밀리 `[hm_mcp:connection|timeout|rpc:<Type>]` 고정(§7.1), RP 동적 계산 체인 노출명 `hm_get_bounding_box`→`hm_create_nodeset_by_box`(§7.1) / v1.8 (2026-07-11) — Codex 적대적 리뷰(P1 브랜치 `--base origin/main`, NO-SHIP 8건) 트리아지 반영: 실결함 2건 수정 — ① gate-run G1/G3·G2 payload 대상의 job_dir 격리 강제(§4.4 — job 밖 정상 덱·`../` traversal로 stage 기록 위조 벡터 차단, #5) ② G1 데이터-완비성(§4.1 — 필수 카드·키워드가 존재해도 데이터 행 없는 헤더-only 빈 덱 fail-closed, criteria `data_bearing`, #4); 백로그 등재 — 벤더 브리지(hm_bridge) 하드닝 P2(§10.2·§15: loopback 기본화·TCP dispatch allowlist(`execute_tcl_raw` 제외)·`execute_tcl_safe` 인자 검증·request-id dedup/타임아웃 계약 일치, #1·#2·#3)·`note_self_correction` job-lock 원자화 P2(#8)·승인 환경변수 경계 = 기존 P3 보안 검토 항목 재확인(#7); 조치 불요 — 브리지 stub NotImplementedError = 선언된 Phase 경계로 MANUAL_P1 실기 게이트가 커버(#6, MANUAL_P1에 수행 범위 A·B·E·F 명시)
+- **버전**: v1.9 (2026-07-14)
+- **상태**: P2 트랙① 완주 구현 완료 반영 — dev 프로파일 완성(솔버 러너 3종·G2 서브에이전트·G3(구조)·pptx 빌더·Mock E2E S0→S5) + P2.5 브리지 실기 페이즈 신설. 개정노트 11건(§13·15·10.2·7.2·7.5·4.3·4.1·3.6·5·2.2·0.5)
+- **이력**: v1.1 (2026-07-05) — 스펙 리뷰 1차 반영: 전이 충족 의미론 신설(§3.6), 승인 채널 분리(§6.1), 마일스톤 반려 전이 정의, 지표 산출성 정정(§0.2·§12), 구현 페이즈 P-넘버링(§13), tool_class 전수 매핑(§7.1) / v1.2 (2026-07-05) — 스펙 리뷰 2차 반영: 전진 공식 예외 2건(셀프서비스 ③ 면제·override FAIL 무효화), §2.2 승인 흐름 정정, tool_class 참조 단일화(§5→§3.1), pilot 명령 표면 보완(intervene·milestone_requested 기록 주체), 승인 2차 잠금, 지표 단위·해석 주석 / v1.3 (2026-07-05) — 스펙 리뷰 3차 반영: 2차 잠금을 approve 한정으로 정정(훅·빌더의 gate-record 정상 경로 보존), P0 테스트 항목 보강. 최종 승인(4차) 후 advisory 2건 추가 반영: gate-record 호출자 마커 스탬프(감사 실효화)·`!` 마커 상속 실증의 §11.2 병기 / v1.4 (2026-07-05) — GUI 전략 반영(사용자 검토 결정): 프론트엔드 2-헤드 원칙(D7), 승인 채널 일반화(§6.1), 승인 카드 파일화, P-GUI 페이즈 신설(§13), SDK/CLI 하네스 동등성 스모크(§15); 확인 패스 advisory 5건 반영(D7 데이터소스에 GateResult·harness 문서 추가, verdict의 manifest 직접 렌더링, 카드 seq 버전링, 동등성 스모크에 승인 채널 행동 포함, 표기 정렬 2건) / v1.5 (2026-07-05) — Codex 적대적 리뷰 재검토 반영: 게이트 기록 계산형 전환(gate-record 폐지 → gate-run, target_sha TOCTOU 대조), 집행 기계류 에이전트 쓰기 차단 신설(D8), jobs/ACTIVE 폐지·CAE_JOB_ID 단일화·쓰기 명령 --job 필수, events 선기록·원자적 manifest·pilot rebuild(§3.5), 셀프서비스 보강 2건(워터마크 판정 등급·P5 조건부 개방); 확인 패스 4건 반영(게이트 인스턴스 귀속 규칙·G2 보호 경로 입력 검증·증거 파일 쓰기 차단·SSOT 용어 정리) + advisory 4건(환류 반영 주체 인간 명시·CAE_JOB_ID 설정 주체·D8 적용 경계·SessionStart 표기); 최종 확인 1건 반영(§10.2 allowlist 네거티브형 전환 — S0 plan.md 교착 해소, 차단 SSOT를 §5로 단일화) + 표기 정렬 3건(§12 인스턴스 언어·§3.4 requires 병기·§9 runtime/ 트리 반영) / v1.6 (2026-07-07) — P0 구현·수동실증 완료 반영(Task 16.3): 개정 노트 8건 — job_created·stage_paused 이벤트 추가·gate_pass/gate_fail 발화 폐지(§3.3), gates 슬롯 게이트×대상 2계층(§3.2·§3.6, Codex F3), 원장 쓰기 job별 파일락 직렬화·개행 커밋 정의(§3.5, Codex F1·F2), override target_sha 바인딩(§4.4, Codex F4), D8 개발 이스케이프 `CAE_COPILOT_DEV_UNLOCK` 명문화(§10.2), paused 해제 = `intervene --resume`·상한 윈도 재정의(§5), paused 단계 편집 하드 차단(§5, F#1), Bash 쓰기 경계·Windows 훅 문법 명문화(§5·§10.2, 최종 리뷰 I1a); 수동실증 findings 3건 — Windows `${CLAUDE_PROJECT_DIR}` 필수(§5), `!`·CLAUDECODE 상속 확정 → 승인채널 = 별도 터미널(§6.1), Stop 훅 턴별 발화 누적 미결 등재(§15) / v1.7 (2026-07-10) — P1 구현 완료 반영: 개정 노트 8건 — 덱 export 프로파일 실물 2종 `fmt: "OS" | "Abaqus"`·Nastran .bdf export는 P2에서 러너와 함께 검토(§7.1), 메시 품질 체크 P2 이연·S1 출구 G1은 export된 덱 린트로 성립(§4.1), 이식 규모 명세화 = 43 이식 + 2 노출 추가(`hm_get_materials`·`hm_get_bridge_status`) = 45 노출·솔버 실행 2종 제외(§7.1), export-후 G1 트리거 = PostToolUse가 `mcp__hm__hm_export_*` 매칭·성공 응답만 검증·`success≠true`→`export-failed` ERROR로 stale 덱 PASS 차단·대상 `deck_path` 우선(§4.1·5, Codex F2), session_summary dedup 해소(§15), G1 미지원 대상 = `unsupported-target`·미지원 카드 형식 = `unsupported-card-format` = ERROR fail-closed(§4.1, Codex F3), 에러 정규화 3패밀리 `[hm_mcp:connection|timeout|rpc:<Type>]` 고정(§7.1), RP 동적 계산 체인 노출명 `hm_get_bounding_box`→`hm_create_nodeset_by_box`(§7.1) / v1.8 (2026-07-11) — Codex 적대적 리뷰(P1 브랜치 `--base origin/main`, NO-SHIP 8건) 트리아지 반영: 실결함 2건 수정 — ① gate-run G1/G3·G2 payload 대상의 job_dir 격리 강제(§4.4 — job 밖 정상 덱·`../` traversal로 stage 기록 위조 벡터 차단, #5) ② G1 데이터-완비성(§4.1 — 필수 카드·키워드가 존재해도 데이터 행 없는 헤더-only 빈 덱 fail-closed, criteria `data_bearing`, #4); 백로그 등재 — 벤더 브리지(hm_bridge) 하드닝 P2(§10.2·§15: loopback 기본화·TCP dispatch allowlist(`execute_tcl_raw` 제외)·`execute_tcl_safe` 인자 검증·request-id dedup/타임아웃 계약 일치, #1·#2·#3)·`note_self_correction` job-lock 원자화 P2(#8)·승인 환경변수 경계 = 기존 P3 보안 검토 항목 재확인(#7); 조치 불요 — 브리지 stub NotImplementedError = 선언된 Phase 경계로 MANUAL_P1 실기 게이트가 커버(#6, MANUAL_P1에 수행 범위 A·B·E·F 명시) / v1.9 (2026-07-14): P2 트랙① 완주 구현 확정·보정 반영(개정노트 11건) — §13 페이즈 표 P2.5 신설(브리지 실 hwx·벤더 하드닝·MANUAL_P1 C·D·메시품질 G1, 노트 1)·벤더 하드닝/메시품질 배치 P2→P2.5(§15·§10.2·§4.1, 노트 2)·§7.2 솔버 러너 실측 보정(OptiStruct "로컬 라이센스 보유" 스테일 정정=미보유·3러너 확정·dev 실솔브 스모크=Abaqus LE 2024·Nastran/OptiStruct dev mock-only, 노트 3)·G3 verdict enum·비차단 의미론 §4.4 SSOT 상호참조 보강(§3.6·§4.3 — 추가 아님, 노트 4)·Nastran .op2 파싱 없이 extracted_files 전달만(§7.2, 노트 5)·pptx dev 기본 레이아웃 자체생성·사내 템플릿 P3(§7.5, 노트 6)·agent_cae '이식'→'참고 재구현' 용어 정정(§0.5·2.2·4.3·7.2·7.5, 노트 7)·reactions=부호 3성분 병진 벡터 [Fx,Fy,Fz]·모멘트 P3(§7.2, 노트 8)·error 택소노미 5 family×12 code+unknown·signature=family:code(§7.2, 노트 9)·§5 '러너 종료' 훅 = 실패 collect 자가복구 계수 이행(result.json sha 중복방지·note_self_correction result_sha·_job_lock 원자화, 노트 10)·analysis_spec.json = closed_form theory 입력(job 루트 비보호, 실 생산자 P3, §4.3, 노트 11)
 - **상위 문서(WHAT의 SSOT)**: `공모전_제안서_통합플랫폼_v6_260705(최종제출).md` — 본 SDD는 그 제안을 실제 구현하기 위한 HOW를 정의한다. 두 문서가 충돌하면 제안서의 "무엇·왜"가 우선하고, 본 SDD의 "어떻게"가 그것을 실현하는 수단이다.
 - **시스템 가칭**: `cae-copilot` (리포지토리명, 변경 가능)
 
@@ -52,7 +52,7 @@
 | 제안서 v6 (SSOT) | 이 폴더 `공모전_제안서_통합플랫폼_v6_260705(최종제출).md` | WHAT — 요구사항 원천 |
 | 기술정본 재배치안 v8 | 이 폴더 `핵심구성요소_재배치안.md` | 4대 구성요소 구조·근거 설명(문구는 v6 우선) |
 | hm-assistant | `C:\_PYTHON\0_CK_Project\4. Hypermesh assistant` | HyperMesh bridge(TCP JSON-RPC :9876) vendor 원본, 도구 정의·mock 서버·criteria 패턴, HM 2026.1 API 검증분 |
-| agent_cae3 | `C:\_PYTHON\0_CK_Project\11. Agent_CAE_improve\agent_cae` | AbaqusWrapper·theory_validator·error_classifier·html_report 이식 원본 (610 테스트 자산) |
+| agent_cae3 | `C:\_PYTHON\0_CK_Project\11. Agent_CAE_improve\agent_cae` | AbaqusWrapper·theory_validator·error_classifier·html_report 참고 재구현 원본 (610 테스트 자산) |
 | ClaudeApp | `C:\_PYTHON\0_CK_Project\17. ClaudeApp` | H-Chat 게이트웨이 경유 claude-agent-sdk 검증 경로, GUI 헤드(P-GUI)의 기반 자산(D7), default-DENY 보안 게이팅 참조 |
 | nCode 조사 | `_brain/knowledge/ncode-designlife-automation-mcp.md` | dtproc/.dcl·flowproc 배치 경로, FEABench 교훈 |
 
@@ -113,7 +113,7 @@ Claude Code 세션 ←─ 운영: H-Chat 게이트웨이(ClaudeApp 자산) / 개
 | 하네스(실행 레일) | CLAUDE.md + Skills + `harness/` | 신규 + 사내 표준문서 |
 | 단일 대화 창구 | Claude Code 세션(운영 GUI는 ClaudeApp) | ClaudeApp (게이트웨이 검증 완) |
 | HyperMesh 텍스트 라이브 제어 | 기존 브리지 유지 + MCP 어댑터 | hm-assistant `bridge/` |
-| Abaqus/Nastran 해석 | CLI 러너 이식 | agent_cae3 `AbaqusWrapper` + 신규 Nastran |
+| Abaqus/Nastran 해석 | CLI 러너 참고 재구현 | agent_cae3 `AbaqusWrapper` + 신규 Nastran |
 | nCode 피로 풀 파이프라인 | dtproc/.dcl 템플릿 flow 러너(신규) | _brain 조사 완 |
 | 게이트1 표준 대조 | 결정론 검증기 + PostToolUse 자동화 | hm-assistant `config/criteria.py` 패턴 |
 | 게이트2 추론 검증 | 검증 서브에이전트(작성 컨텍스트 분리) | 신규 |
@@ -246,7 +246,7 @@ rules:
 > **전진 가능 = ① 해당 단계의 모든 exit_gates 실행 완료 ∧ ② 각 verdict ∉ {FAIL, ERROR} (엔지니어 override로 무효화된 FAIL 제외 — §4.4) ∧ ③ 단계에 마일스톤이 지정돼 있으면 status=approved (milestone 모드에 한함 — self_service job은 ③ 면제, §6.2)**
 
 - **PASS**: 충족 — 단 GateResult의 `target_sha`가 대상 파일의 현재 해시와 일치할 때만 유효(§3.4 TOCTOU 방지), 불일치 시 재실행 필요.
-- **ADVISORY / NO_REFERENCE**: 전이를 막지 않는다 — 단, 승인 요약 카드에 필수 표기되어 마일스톤 승인의 판단 대상이 된다. 마일스톤 대기가 생략되는 셀프서비스 job에서는 산출물 상태로 기록되고 '사전검토용' 워터마크가 그 역할을 대신한다(§6.2).
+- **ADVISORY / NO_REFERENCE**: 전이를 막지 않는다 — 단, 승인 요약 카드에 필수 표기되어 마일스톤 승인의 판단 대상이 된다. 마일스톤 대기가 생략되는 셀프서비스 job에서는 산출물 상태로 기록되고 '사전검토용' 워터마크가 그 역할을 대신한다(§6.2). verdict enum과 이 비차단 전이 의미론의 SSOT는 §4.4(공통 규칙)다.
 - **FAIL**: 수정 후 재실행(attempts 증가). **ERROR**: fail-closed — 전진 불가, 사람 호출.
 - **기록의 인스턴스 귀속(게이트×대상 2계층 — Codex F3)**: gate-run 기록은 단계가 아니라 **게이트×대상(target) 인스턴스** 기준으로 귀속된다(§3.2 `gates[게이트][target]`) — 같은 대상의 재실행은 그 (게이트,대상) 슬롯을 최신 GateResult로 갱신하고(attempts 누적), **다른 대상은 독립 슬롯**이라 서로 덮지 않는다. 게이트 충족 판정 = **관찰된 모든 대상 인스턴스가 ∉{FAIL, ERROR} ∧ 최소 1개 존재**(각 현행 target_sha 일치 기준, §3.4). 게이트당 1슬롯이면 다른 target의 PASS가 실제 산출물의 FAIL을 덮어 전이를 우회하므로 2계층으로 막는다. 이 귀속이 없으면 S3 자가복구(덱 재편집)가 S2.G1을 영구 미충족으로 만드는 교착이 생긴다. §12의 최초 실행/재실행 구분은 이벤트 순서(seq)로 산출한다.
 - **마일스톤 반려 전이**: `rejected` 기록 시 해당 마일스톤의 소속 단계는 `in_progress`로 복귀(재작업). 재작업 후 게이트는 재실행되며 attempts는 누적된다. 마일스톤은 재요청(`milestone_requested`) 시 `pending`으로 복귀 → 재승인. 반려 사유는 §6.1 환류 경로를 따른다.
@@ -260,7 +260,7 @@ rules:
 - **트리거**: PostToolUse 자동 — `decks/**`·`reports/**` Edit/Write, HM 덱 export 후(matcher가 `mcp__hm__hm_export_*` 완료를 매칭 — **성공 응답만 검증 경로**: `success≠true`·불명 응답은 대상 파일 잔존 시 `export-failed` ERROR로 stale 덱 PASS를 차단하고, 린트 대상은 응답 `deck_path` 우선·입력 `path` 폴백 — §5·Codex F2). 수동 호출도 가능.
 - **검사 대상별 체크**:
   - 덱 린트: 단위계(mm-t-s: E=210000 MPa, ρ=7.85e-9 t/mm³), 필수 카드/키워드(**데이터-완비성 포함** — 필수 카드·키워드가 존재해도 데이터 행이 없는 헤더-only 빈 덱은 FAIL, criteria `data_bearing` 목록, Codex 적대 리뷰 2026-07-11 #4), **Nastran 고정폭 필드 정렬**, 재질–프로퍼티–섹션 연결 무결성, 사내 표준(명명 규칙·출력 요청 세트)
-  - 메시 품질: **P2 이연**(hm-assistant에 품질 리포트 도구 부재 — 사용자 결정 2026-07-07). P1의 S1 출구 G1은 "export된 덱의 린트"로 성립하며, 메시 품질 대조(S1 출구에서 hm_mcp 품질 리포트를 `harness/criteria/mesh_quality.yaml` 기준과 대조)는 P2에서 증보
+  - 메시 품질: **P2.5 이연**(hm-assistant에 품질 리포트 도구 부재 — 사용자 결정 2026-07-07; 품질 리포트가 브리지 실 hwx 구현에 커플되므로 배치 P2→P2.5, §13). P1의 S1 출구 G1은 "export된 덱의 린트"로 성립하며, 메시 품질 대조(S1 출구에서 hm_mcp 품질 리포트를 `harness/criteria/mesh_quality.yaml` 기준과 대조)는 P2.5에서 증보
   - 보고서 린트: 필수 섹션 존재, **출처 인용 존재(무출처 차단)**, 수치–단위 표기. 트리거 2경로 — 원고(md, LLM 작성 섹션)는 PostToolUse 자동, 최종 pptx는 빌더가 `pilot gate-run` 호출(§7.5)
 - **미지원 대상·형식 = ERROR(fail-closed D6)**: G1 라우터가 `.fem`/`.inp` 밖 확장자(예: `reports/*.md` — 보고서 린트는 P2)를 만나면 verdict **ERROR**(check `unsupported-target`). 같은 원칙으로 `.fem` 내부의 미지원 카드 형식(large-field `*`·연속 `+`)도 **ERROR**(check `unsupported-card-format`) — 조용한 무시는 false PASS를 낳는다(Codex 적대 리뷰 2026-07-07 F3). P2에서 보고서·pptx 린터 등록·실기 export 샘플 기반 파서 확장으로 해소.
 - **기준의 이중 표현**: 사람용 `harness/standards/*.md` ↔ 기계용 `harness/criteria/*.yaml` 쌍. 모든 체크의 `source` 필드가 문서 절을 인용해 동기화를 강제.
@@ -279,12 +279,14 @@ rules:
 
 | problem_class | 자동 체크 | 판정 모드 |
 |---|---|---|
-| closed_form | 이론값 직접 대조 (theory_validator 이식) | **자동 PASS/FAIL** + 엔지니어 승인 |
+| closed_form | 이론값 직접 대조 (theory_validator 참고 재구현) | **자동 PASS/FAIL** + 엔지니어 승인 |
 | linear_static_complex | 평형 잔차(반력합=하중합)·단위 일관성·오더 체크·응력분포 패턴 + 유사 부품 **실적 범위 대조** | ADVISORY — 자동 판정 없음, M3 승인 필수 |
 | fatigue_load_history | 지배 하중케이스 정합(하중이력 분석 ↔ 피로 기여도)·수명 오더·손상 위치 타당성 + 수명 실적 범위 | ADVISORY — M3 승인 필수 |
 | nonlinear_advanced | 참고 신호만(자동 판정 배제) | ADVISORY — M3 승인 필수 |
 
 - 실적 범위 DB = `harness/cases/` 사례 카드의 정량 필드(부품군·하중유형·응답 범위·출처 보고서·verified 플래그). **콜드스타트를 정직하게 계획**: Phase 1 파일럿 부품군 한정 수동 구축, 부재 시 `NO_REFERENCE`.
+- **verdict 의미론(상호참조)**: 위 판정 모드 표는 problem_class별 스코프만 규정한다 — verdict enum·ADVISORY/NO_REFERENCE 비차단 전이의 SSOT는 §4.4(공통 규칙)·§3.6이다. 자동 PASS/FAIL은 `closed_form` 한정이고, 그 밖은 M3 승인이 최종 방어선(§4.4).
+- **`closed_form` 이론 입력 = `analysis_spec.json`**: theory 검증기 입력(structure_type·geometry·material·load)은 job 루트의 **비보호 아티팩트** `analysis_spec.json`에서 읽는다. P2(dev)는 합성 픽스처로 공급하고, 실 생산자(deck→spec 추출)는 P3로 이연한다(사용자 결정 2026-07-12).
 
 ### 4.4 공통 규칙
 
@@ -310,7 +312,7 @@ rules:
 | PreToolUse | 에이전트의 `pilot approve`(승인·반려·override)·G2 기록 호출 | **무조건 차단** — 승인은 인간 전용 채널(§6.1), G2 기록은 SubagentStop 훅 전용(§4.2). ※ gate-run(G1·G3)은 계산형이라 차단 불요(§4.4) |
 | PreToolUse | 보고서 빌더 `--official` | M3 승인 필수. 미승인·셀프서비스 → '사전검토용' 워터마크 강제 |
 | PostToolUse | `decks/**`·`reports/**` Edit/Write, `mcp__hm__hm_export_*` 완료 | **`pilot gate-run G1` 자동 호출**(계산형 §4.4) → 기록, FAIL 시 체크리스트 반환(수정 유도). export 경로는 **성공 응답만 검증**(`success≠true`·불명 → 대상 파일 잔존 시 `export-failed` ERROR로 stale 덱 PASS 차단), 린트 대상 = 응답 `deck_path` 우선(입력 `path` 폴백) — Codex F2 |
-| PostToolUse | 러너 종료 | result.json 파싱·기록, 에러 시 error_classifier 시그니처 로깅 |
+| PostToolUse | 러너 종료 | result.json 파싱·기록. **실패 collect**(result.json에 `error` 존재)는 `error.signature`로 §5 자가복구 사다리에 계수 — 동일 result.json 중복 계수 방지(내용 sha 대조). `note_self_correction`에 optional `result_sha`, scan~pause 임계구역은 `_job_lock`으로 원자화(Task 1·8) |
 | SubagentStop | gate2-reviewer 완료 | 결과 파싱 → G2 기록(`gate-run G2 --from-subagent <결과파일>`) — 메인 에이전트 미경유(§4.2) |
 | Stop | 에이전트 턴 종료(주의: "세션 완전 종료"가 아님 — §15) | 미결 게이트·미승인 마일스톤 요약 **경고(차단 아님)** + `session_summary` 이벤트 기록 |
 | SessionStart | 세션 시작 | `CAE_JOB_ID` 검증(미설정 시 미완료 job 안내 — §3.2) + 해당 job의 현재 단계·미결 항목을 컨텍스트에 주입(중단 후 재개 인체공학) |
@@ -385,18 +387,19 @@ python -m cae_tools.runners.<solver> collect --job-dir <dir>                 →
   "results": {
     "max_stress": {"value": 312.5, "unit": "MPa", "location": "..."},
     "max_displacement": {"value": 1.82, "unit": "mm", "location": "..."},
-    "reactions": {"sum": [...], "applied": [...]},     // G3 평형 잔차용 — 필수 추출 항목
+    "reactions": {"sum": [Fx,Fy,Fz], "applied": [Fx,Fy,Fz]},  // 부호 3성분 병진 벡터(스칼라 크기 아님; 모멘트 P3 이연). G3 평형 잔차 |sum+applied|/|applied|의 필수 입력 — 부호규약 sum≈-applied@평형(절대 물리부호 실검증 P3)
     "extracted_files": ["extracted/stress_field.csv"]
   }
 }
 ```
 
-- 에러 분류: agent_cae3 `error_classifier`(4 family × 21 sub-code) 이식 — 시그니처가 재발률 지표·플레이북·환류의 공통 키.
+- 에러 분류: agent_cae3 `error_classifier` **참고 재구현** — 택소노미는 도메인 재검토로 **5 family(license/input/convergence/resource/runtime) × 12 code + unknown**으로 확정(참고 4 family × 21 sub-code에서 llm/physics 드롭·license 신설). signature = 소문자 `family:code` 콜론 토큰(예 `convergence:divergence`), fail-closed sink은 리터럴 `unknown`(code=None). 이 시그니처가 재발률 지표(§12)·error-playbooks(§8, 시그니처를 키로 sync)·환류의 공통 키.
 - 솔버별:
-  - **Abaqus**: AbaqusWrapper 이식(입력 스크립트 동적 생성 → `abaqus cae noGUI` → odbAccess 추출). 관련 테스트 동반 이식.
-  - **Nastran**: 정식 구현 — .bdf 실행, `.f06`(텍스트 로그·에러)·`.op2`(결과) 추출. .op2가 nCode의 FE 입력이므로 트랙②의 기본 구조해석 경로.
-  - **OptiStruct**: 동일 계약, 로컬 라이센스 보유. 단 P2 구현 범위는 Abaqus·Nastran 우선 — OptiStruct는 계약만 공유하는 후순위(제안서 명시 솔버가 아니므로 포함 여부는 계획 단계에서 판단).
+  - **Abaqus**: AbaqusWrapper 참고 재구현(입력 스크립트 동적 생성 → `abaqus cae noGUI` → odbAccess 추출). 관련 테스트 동반 재구현.
+  - **Nastran**: 정식 구현 — .bdf 실행. **수치는 `.f06` 텍스트에서 추출**하고, **`.op2`는 파싱하지 않고 `extracted_files`로 전달만** 한다(P4 nCode의 FE 입력 — pyNastran 의존 미도입). .op2가 nCode의 FE 입력이므로 트랙②의 기본 구조해석 경로.
+  - **OptiStruct**: 동일 계약. **P2 포함 = 3러너 확정**(실구현 환경은 Abaqus·Nastran·OptiStruct 3솔버 모두 대응 필요 — 사용자 확인 2026-07-11). `.out` 텍스트 요약 + `.h3d`/`.op2` 산출 파일 전달까지(심층 추출 P3). 로컬 라이센스는 **미보유**(v1.8 "로컬 라이센스 보유"는 스테일 — 정정).
   - **nCode**: §7.3.
+- **dev 로컬 실솔브 스모크 = Abaqus Learning Edition 2024**: 노드 1,000 한도·병렬 불가·상용 DB(.cae/.odb) 비호환·교육용 무상 약관(사내 개발 검증 사용의 약관 적합성은 사용자 판단). 소형 스모크 덱은 한도 내라 파이프라인 무영향. **Nastran·OptiStruct는 dev에서 mock-only**(실검증은 P3 사내 환경).
 
 ### 7.3 nCode 러너 — 템플릿 flow 치환
 
@@ -411,8 +414,8 @@ python -m cae_tools.runners.<solver> collect --job-dir <dir>                 →
 
 ### 7.5 보고 빌더 (pptx)
 
-- `report build --job <id> [--official]`: **python-pptx 기반 사내 표준 양식 템플릿 치환** + LLM 작성 섹션(요약·근거·트레이드오프) + **게이트 증빙 자동 첨부**(manifest에서 게이트 결과·승인 이력).
-- 시각화: agent_cae3 `html_report` 렌더러 이식(헤드리스 matplotlib — 컨투어·이력 차트)→ PNG를 pptx에 삽입.
+- `report build --job <id> [--official]`: **python-pptx 기반 레이아웃** + LLM 작성 섹션(요약·근거·트레이드오프) + **게이트 증빙 자동 첨부**(manifest에서 게이트 결과·승인 이력). **dev 프로파일: 사내 양식 파일 부재 → 빌더가 기본 레이아웃을 자체 생성**하고, 사내 표준 양식 템플릿 치환은 P3(운영 이관) 항목.
+- 시각화: agent_cae3 `html_report` 렌더러 참고 재구현(헤드리스 matplotlib — 컨투어·이력 차트)→ PNG를 pptx에 삽입.
 - 빌더는 pptx 생성 직후 `pilot gate-run G1 <pptx> --job <id>`를 호출한다 — 린트는 pilot 안의 검증기가 수행(계산형 §4.4). pptx는 에이전트 Edit 경로 밖(바이너리, 빌더 생성물)이므로 PostToolUse 대신 빌더가 트리거를 겸한다.
 - `--official`은 M3 승인 필수(훅). 미승인·셀프서비스는 '사전검토용' 워터마크.
 - 협의자료 초안: Skill이 대책 요약·근거·트레이드오프·증빙 구조로 작성 → G1 보고서 린트(필수 섹션·출처 인용) 통과 필수.
@@ -490,7 +493,7 @@ cae-copilot/
 - manifest 무결성(§3.5): 장부 조작에 의한 게이트 우회 경로 봉쇄.
 - 에이전트는 사용자 계정 권한·라이선스 범위 내 실행. 공식 판정 권한은 엔지니어 유지(M3 + `--official` 훅).
 - **D8의 적용 경계**: 위 차단은 **운영 에이전트 세션**(해석 업무 수행)용 설정이다. cae-copilot 자체를 개발하는 세션(P0~P5에서 gates/·pilot/·hooks 구현)은 기동자가 **`CAE_COPILOT_DEV_UNLOCK=1`**을 설정해 훅의 **D8 기계류 차단만** 해제한다(장부·증거·approve·G2 차단은 개발 중에도 유지 — fail-closed 기본). 이 구분이 없으면 P0 첫날 자기 리포를 수정할 수 없다. `tests/**`도 운영 세션에서는 쓰기 불가(의도된 제한).
-- **벤더 브리지(hm_bridge) 신뢰 경계(P2/P3, Codex 적대 리뷰 2026-07-11)**: byte-frozen 상류 fork인 TCP 브리지는 0.0.0.0 무인증 바인딩·`execute_tcl_raw` dispatch 등록·arg 주입 가능한 `execute_tcl_safe`를 그대로 안고 있다. Phase 1 신뢰 경계는 **엔지니어 로컬 HM 콘솔 + localhost relay**(§6.1 단일 사용자 계정)라 즉시 위험은 낮으나, 공유망 배치 전 fork 하드닝 필수 — loopback 기본화·dispatch allowlist(raw 제외)·typed 인자 검증(§15 백로그). MCP 계층은 이미 `execute_tcl_raw`를 노출하지 않으나 TCP dispatch는 별도 차단이 없다.
+- **벤더 브리지(hm_bridge) 신뢰 경계(P2.5 하드닝/P3 배치, Codex 적대 리뷰 2026-07-11)**: byte-frozen 상류 fork인 TCP 브리지는 0.0.0.0 무인증 바인딩·`execute_tcl_raw` dispatch 등록·arg 주입 가능한 `execute_tcl_safe`를 그대로 안고 있다. Phase 1 신뢰 경계는 **엔지니어 로컬 HM 콘솔 + localhost relay**(§6.1 단일 사용자 계정)라 즉시 위험은 낮으나, 공유망 배치 전 fork 하드닝 필수 — loopback 기본화·dispatch allowlist(raw 제외)·typed 인자 검증. 이 하드닝은 브리지 실 hwx 구현과 **동일 fork 이벤트(P2.5)**로 묶는다(§13·§15 백로그). MCP 계층은 이미 `execute_tcl_raw`를 노출하지 않으나 TCP dispatch는 별도 차단이 없다.
 - GUI 헤드(ClaudeApp 계열) 채택 시 default-DENY 정책과 본 리포 allowlist의 정합 확인(P-GUI 착수 체크 항목).
 
 ---
@@ -531,8 +534,10 @@ cae-copilot/
 P0 골격       리포 구조 + pilot CLI/manifest + hooks + tracks.yaml + CLAUDE.md v1
               → "훅 차단이 작동하는 빈 파이프라인" (우회 시도 테스트 이때부터)
 P1 전처리     hm_mcp + bridge vendor(2026.1) + G1 덱 린트 + S1·S2 Skill
-P2 트랙① 완주 Abaqus·Nastran 러너 + G2 서브에이전트 + G3(구조) + pptx 빌더
+P2 트랙① 완주 Abaqus·Nastran·OptiStruct 러너 + G2 서브에이전트 + G3(구조) + pptx 빌더
               → Mock E2E 통과 = dev 프로파일 완성
+P2.5 브리지실기 hm_bridge 실 hwx 구현(스텁 33종) + 벤더 하드닝(#1·#2·#3, fork 선언·
+              CHECKSUMS 개정) + MANUAL_P1 C·D + 메시 품질 G1        (P2 후, P3 전제)
 P3 운영 이관  사내 설치 + 실 하네스 문서 + 파일럿 실측 개시          (P2 후)
 P4 트랙②     load_history(.req/.rsp) + nCode 러너 + G3-피로          (P2 후, P3와 병행 가능)
 P-GUI 헤드    claude-agent-sdk GUI(ClaudeApp 계열): 하네스 project 로딩(D7) +
@@ -566,7 +571,7 @@ P5 성숙       환류 자동화 + 지표 집계 + 셀프서비스 모드 개방
 | 다중 사용자 승인 진본성 | 확산(Phase 2+) | Phase 1 신뢰 경계 = 단일 사용자 계정(§6.1). 확산 시 승인자 인증 채널 설계 |
 | SDK/CLI 하네스 동등성 (GUI 헤드) | P-GUI | ClaudeApp은 격리 목적으로 `setting_sources=[]`로 하네스 로딩을 껐음 — GUI 헤드는 project 로딩을 켜야 하며, hooks 발화·Skills 로딩·승인 채널 행동(패널 approve 통과 + 세션 내 에이전트 approve 차단)의 SDK/CLI 동등성을 P-GUI 착수 스모크(§11.2 우회 스위트 재실행 포함)로 실증 |
 | Stop 훅 session_summary 중복 누적 (실증 발견 — Task 16.2) | 원장 팽창 | Claude Code Stop 훅은 "세션 종료"가 아니라 **매 에이전트 턴 종료**마다 발화 → 상태 불변이어도 동일 `session_summary`가 append-only 원장에 누적. **P1 해소(dedup 채택)** — Stop 훅이 직전 `session_summary`와 payload가 동일하면 기록 생략(정보 무손실). `harness/wiki/inbox/stop-hook-summary-accumulation.md` 제안 반영 |
-| 벤더 브리지(hm_bridge) 보안 자세 (Codex 적대 리뷰 2026-07-11 #1·#2·#3) | 모델 변조·중복 실행 | byte-frozen 상류 fork라 P1 미개변. **P2 하드닝 대상**: ① `execute_tcl_safe`가 `tcl_args`를 raw 연결 → `; ` 주입으로 화이트리스트 무력화(#1) → 명령별 typed 검증·이스케이프 ② TCP dispatch가 0.0.0.0 무인증 바인딩 + `execute_tcl_raw` 등록(MCP는 숨김·`VENDORED_FROM.md` "노출금지" 명시하나 TCP는 노출, #2) → loopback 기본화·dispatch allowlist ③ 클라이언트 60초 vs 브리지 300초 타임아웃 불일치·미취소로 변형 RPC 재시도 시 중복 실행(#3, 현재 stub이라 잠재—실 hwx 구현 시 발현) → request-id dedup·타임아웃 계약 일치. **실 구현은 MANUAL_P1 실기 게이트 이후** |
+| 벤더 브리지(hm_bridge) 보안 자세 (Codex 적대 리뷰 2026-07-11 #1·#2·#3) | 모델 변조·중복 실행 | byte-frozen 상류 fork라 P1 미개변. **P2.5 하드닝 대상(실 구현과 동일 fork 이벤트)**: ① `execute_tcl_safe`가 `tcl_args`를 raw 연결 → `; ` 주입으로 화이트리스트 무력화(#1) → 명령별 typed 검증·이스케이프 ② TCP dispatch가 0.0.0.0 무인증 바인딩 + `execute_tcl_raw` 등록(MCP는 숨김·`VENDORED_FROM.md` "노출금지" 명시하나 TCP는 노출, #2) → loopback 기본화·dispatch allowlist ③ 클라이언트 60초 vs 브리지 300초 타임아웃 불일치·미취소로 변형 RPC 재시도 시 중복 실행(#3, 현재 stub이라 잠재—실 hwx 구현 시 발현) → request-id dedup·타임아웃 계약 일치. **실 구현은 MANUAL_P1 실기 게이트 이후** |
 | 자가복구 상한 검사 비원자성 (Codex 적대 리뷰 2026-07-11 #8) | 상한 초과 1건 | `store.note_self_correction`이 paused 선검사→append→재검사를 job-lock 밖에서 수행 → 동일 job 동시 훅이 둘 다 선검사 통과 시 상한 +1 기록 가능. 1차 통제는 F#1 하드컷·단일세션 훅 직렬화라 창 희박(medium). **P2**: scan~pause 전체를 `_job_lock` 임계구역으로 |
 
 ---
