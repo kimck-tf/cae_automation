@@ -572,7 +572,7 @@ P5 성숙       환류 자동화 + 지표 집계 + 셀프서비스 모드 개방
 | SDK/CLI 하네스 동등성 (GUI 헤드) | P-GUI | ClaudeApp은 격리 목적으로 `setting_sources=[]`로 하네스 로딩을 껐음 — GUI 헤드는 project 로딩을 켜야 하며, hooks 발화·Skills 로딩·승인 채널 행동(패널 approve 통과 + 세션 내 에이전트 approve 차단)의 SDK/CLI 동등성을 P-GUI 착수 스모크(§11.2 우회 스위트 재실행 포함)로 실증 |
 | Stop 훅 session_summary 중복 누적 (실증 발견 — Task 16.2) | 원장 팽창 | Claude Code Stop 훅은 "세션 종료"가 아니라 **매 에이전트 턴 종료**마다 발화 → 상태 불변이어도 동일 `session_summary`가 append-only 원장에 누적. **P1 해소(dedup 채택)** — Stop 훅이 직전 `session_summary`와 payload가 동일하면 기록 생략(정보 무손실). `harness/wiki/inbox/stop-hook-summary-accumulation.md` 제안 반영 |
 | 벤더 브리지(hm_bridge) 보안 자세 (Codex 적대 리뷰 2026-07-11 #1·#2·#3) | 모델 변조·중복 실행 | byte-frozen 상류 fork라 P1 미개변. **P2.5 하드닝 대상(실 구현과 동일 fork 이벤트)**: ① `execute_tcl_safe`가 `tcl_args`를 raw 연결 → `; ` 주입으로 화이트리스트 무력화(#1) → 명령별 typed 검증·이스케이프 ② TCP dispatch가 0.0.0.0 무인증 바인딩 + `execute_tcl_raw` 등록(MCP는 숨김·`VENDORED_FROM.md` "노출금지" 명시하나 TCP는 노출, #2) → loopback 기본화·dispatch allowlist ③ 클라이언트 60초 vs 브리지 300초 타임아웃 불일치·미취소로 변형 RPC 재시도 시 중복 실행(#3, 현재 stub이라 잠재—실 hwx 구현 시 발현) → request-id dedup·타임아웃 계약 일치. **실 구현은 MANUAL_P1 실기 게이트 이후** |
-| 자가복구 상한 검사 비원자성 (Codex 적대 리뷰 2026-07-11 #8) | 상한 초과 1건 | `store.note_self_correction`이 paused 선검사→append→재검사를 job-lock 밖에서 수행 → 동일 job 동시 훅이 둘 다 선검사 통과 시 상한 +1 기록 가능. 1차 통제는 F#1 하드컷·단일세션 훅 직렬화라 창 희박(medium). **P2**: scan~pause 전체를 `_job_lock` 임계구역으로 |
+| 자가복구 상한 검사 비원자성 (Codex 적대 리뷰 2026-07-11 #8) | 상한 초과 1건 | `store.note_self_correction`이 paused 선검사→append→재검사를 job-lock 밖에서 수행 → 동일 job 동시 훅이 둘 다 선검사 통과 시 상한 +1 기록 가능. 1차 통제는 F#1 하드컷·단일세션 훅 직렬화라 창 희박(medium). **P2 해소(Task 1 `eb11192`, §5 반영)**: scan~pause 전체를 `_job_lock` 임계구역으로 원자화. |
 
 ---
 
